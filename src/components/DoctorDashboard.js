@@ -215,6 +215,1915 @@
 //     </Box>
 //   );
 // }
+// import { useContext, useEffect, useState } from "react";
+// import axios from "axios";
+// import { AuthContext } from "../context/AuthContext";
+// import DoctorProfileForm from "./DoctorProfileForm";
+// import {
+//   Box,
+//   Typography,
+//   Paper,
+//   CircularProgress,
+//   Alert,
+//   Grid,
+//   Avatar,
+//   Card,
+//   CardContent,
+// } from "@mui/material";
+// import { motion } from "framer-motion";
+
+// export default function DoctorDashboard() {
+//   const { user } = useContext(AuthContext);
+//   const userId = user?.id || localStorage.getItem("userId");
+
+//   const [doctor, setDoctor] = useState(null);
+//   const [patients, setPatients] = useState([]);
+//   const [appointments, setAppointments] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [profileMissing, setProfileMissing] = useState(false);
+//   const [error, setError] = useState("");
+
+//   // 🔹 Fetch doctor
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const docRes = await axios.get(
+//           `http://localhost:8080/doctor/user/${userId}`
+//         );
+
+//         if (!docRes.data) {
+//           setProfileMissing(true);
+//           return;
+//         }
+
+//         const doctorData = docRes.data;
+//         setDoctor(doctorData);
+
+//         const patRes = await axios.get(
+//           `http://localhost:8080/doctor/${doctorData.id}/patients`
+//         );
+//         setPatients(patRes.data);
+
+//         const appRes = await axios.get(
+//           `http://localhost:8080/appointments/doctor/${doctorData.id}`
+//         );
+//         setAppointments(appRes.data);
+//       } catch (err) {
+//         console.error(err);
+//         setProfileMissing(true);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     if (userId) fetchData();
+//   }, [userId]);
+
+//   // 🔹 Show profile form
+//   if (profileMissing) {
+//     return (
+//       <DoctorProfileForm
+//         userId={userId}
+//         onCreated={(doc) => {
+//           setDoctor(doc);
+//           setProfileMissing(false);
+//         }}
+//       />
+//     );
+//   }
+
+//   if (loading)
+//     return (
+//       <Box sx={{ textAlign: "center", mt: 10 }}>
+//         <CircularProgress size={60} />
+//       </Box>
+//     );
+
+//   if (error)
+//     return (
+//       <Box sx={{ textAlign: "center", mt: 10 }}>
+//         <Alert severity="error">{error}</Alert>
+//       </Box>
+//     );
+
+//   return (
+//     <Box
+//       sx={{
+//         minHeight: "100vh",
+//         background: "radial-gradient(circle at top, #021024, #020617 60%)",
+//         color: "#fff",
+//         p: 4,
+//       }}
+//     >
+//       {/* 👨‍⚕️ Doctor Profile */}
+//       <motion.div initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }}>
+//         <Paper
+//           sx={{
+//             p: 5,
+//             mb: 5,
+//             textAlign: "center",
+//             borderRadius: 4,
+//             backdropFilter: "blur(20px)",
+//             background:
+//               "linear-gradient(145deg, rgba(0,191,255,0.2), rgba(255,255,255,0.05))",
+//             boxShadow: "0 0 50px rgba(0,191,255,0.35)",
+//           }}
+//         >
+//           <Avatar
+//             sx={{
+//               width: 120,
+//               height: 120,
+//               margin: "auto",
+//               mb: 2,
+//               bgcolor: "#00e5ff",
+//               fontSize: 40,
+//               boxShadow: "0 0 30px rgba(0,229,255,0.8)",
+//             }}
+//           >
+//             {doctor?.name?.charAt(0)}
+//           </Avatar>
+
+//           <Typography
+//             variant="h4"
+//             sx={{
+//               fontWeight: "bold",
+//               color: "#ffffff",
+//               textShadow: "0 0 10px rgba(0,229,255,0.9)",
+//             }}
+//           >
+//             Dr. {doctor?.name}
+//           </Typography>
+
+//           <Typography sx={{ color: "#e0f7ff", mt: 1 }}>
+//             {doctor?.specialization}
+//           </Typography>
+//           <Typography sx={{ color: "#e0f7ff" }}>📞 {doctor?.contact}</Typography>
+//           <Typography sx={{ color: "#e0f7ff" }}>🏥 {doctor?.hospital}</Typography>
+//         </Paper>
+//       </motion.div>
+
+//       {/* 📊 Stats */}
+//       <Grid container spacing={3}>
+//         {[
+//           { title: "Patients", value: patients.length },
+//           { title: "Appointments", value: appointments.length },
+//           { title: "Access Requests", value: 0 },
+//         ].map((card, i) => (
+//           <Grid item xs={12} md={4} key={i}>
+//             <Card sx={{ textAlign: "center", p: 3, borderRadius: 3 }}>
+//               <Typography variant="h6">{card.title}</Typography>
+//               <Typography variant="h3">{card.value}</Typography>
+//             </Card>
+//           </Grid>
+//         ))}
+//       </Grid>
+
+//       {/* 👥 Patients */}
+//       <Typography variant="h5" sx={{ mt: 5, mb: 2 }}>
+//         Assigned Patients
+//       </Typography>
+
+//       <Grid container spacing={2}>
+//         {patients.map((p) => (
+//           <Grid item xs={12} md={4} key={p.id}>
+//             <Card sx={{ textAlign: "center", p: 2 }}>
+//               <Avatar sx={{ margin: "auto", bgcolor: "#00bcd4" }}>
+//                 {p.name?.charAt(0)}
+//               </Avatar>
+//               <Typography>{p.name}</Typography>
+//               <Typography>ID: {p.id}</Typography>
+//             </Card>
+//           </Grid>
+//         ))}
+//       </Grid>
+//     </Box>
+//   );
+// }
+
+
+
+
+// import { useContext, useEffect, useState } from "react";
+// import axios from "axios";
+// import { AuthContext } from "../context/AuthContext";
+// import DoctorProfileForm from "./DoctorProfileForm";
+// import {
+//   Box,
+//   Typography,
+//   Paper,
+//   CircularProgress,
+//   Alert,
+//   Grid,
+//   Avatar,
+//   Card,
+//   CardContent,
+//   Button,
+//   Chip,
+//   Divider,
+// } from "@mui/material";
+// import { motion } from "framer-motion";
+
+// export default function DoctorDashboard() {
+//   const { user } = useContext(AuthContext);
+//   const userId = user?.id || localStorage.getItem("userId");
+
+//   const [doctor, setDoctor] = useState(null);
+//   const [patients, setPatients] = useState([]);
+//   const [appointments, setAppointments] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [profileMissing, setProfileMissing] = useState(false);
+//   const [error, setError] = useState("");
+
+//   // 🔹 Fetch data
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const docRes = await axios.get(
+//           `http://localhost:8080/doctor/user/${userId}`
+//         );
+
+//         if (!docRes.data) {
+//           setProfileMissing(true);
+//           return;
+//         }
+
+//         const doctorData = docRes.data;
+//         setDoctor(doctorData);
+
+//         const patRes = await axios.get(
+//           `http://localhost:8080/doctor/${doctorData.id}/patients`
+//         );
+//         setPatients(patRes.data);
+
+//         const appRes = await axios.get(
+//           `http://localhost:8080/appointments/doctor/${doctorData.id}`
+//         );
+//         setAppointments(appRes.data);
+//       } catch (err) {
+//         console.error(err);
+//         setProfileMissing(true);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     if (userId) fetchData();
+//   }, [userId]);
+
+//   const acceptAppointment = async (id) => {
+//     await axios.put(`http://localhost:8080/appointments/${id}/approve`);
+//     setAppointments((prev) =>
+//       prev.map((a) => (a.id === id ? { ...a, status: "APPROVED" } : a))
+//     );
+//   };
+
+//   const rejectAppointment = async (id) => {
+//     await axios.put(`http://localhost:8080/appointments/${id}/reject`);
+//     setAppointments((prev) => prev.filter((a) => a.id !== id));
+//   };
+
+//   if (profileMissing) {
+//     return (
+//       <DoctorProfileForm
+//         userId={userId}
+//         onCreated={(doc) => {
+//           setDoctor(doc);
+//           setProfileMissing(false);
+//         }}
+//       />
+//     );
+//   }
+
+//   if (loading)
+//     return (
+//       <Box sx={{ textAlign: "center", mt: 10 }}>
+//         <CircularProgress size={60} />
+//       </Box>
+//     );
+
+//   const pending = appointments.filter((a) => a.status === "PENDING");
+//   const approved = appointments.filter((a) => a.status === "APPROVED");
+
+//   return (
+//     <Box
+//       sx={{
+//         minHeight: "100vh",
+//         background:
+//           "linear-gradient(135deg,#020617,#021024,#020617)",
+//         color: "#ffffff",
+//         p: 4,
+//       }}
+//     >
+//       {/* 👨‍⚕️ PROFILE */}
+//       <Paper
+//         sx={{
+//           p: 5,
+//           mb: 5,
+//           textAlign: "center",
+//           borderRadius: 4,
+//           background: "rgba(255,255,255,0.08)",
+//           backdropFilter: "blur(25px)",
+//           boxShadow: "0 0 40px rgba(0,191,255,0.35)",
+//           color: "#fff",
+//         }}
+//       >
+//         <Avatar
+//           sx={{
+//             width: 120,
+//             height: 120,
+//             margin: "auto",
+//             mb: 2,
+//             bgcolor: "#00e5ff",
+//             fontSize: 40,
+//           }}
+//         >
+//           {doctor?.name?.charAt(0)}
+//         </Avatar>
+
+//         <Typography variant="h4" fontWeight="bold">
+//           Dr. {doctor?.name}
+//         </Typography>
+//         <Typography color="#80d8ff">{doctor?.specialization}</Typography>
+//         <Typography>📞 {doctor?.contact}</Typography>
+//         <Typography>🏥 {doctor?.hospital}</Typography>
+//       </Paper>
+
+//       {/* 📊 STATS */}
+//       <Grid container spacing={3}>
+//         {[
+//           { title: "Patients", value: patients.length },
+//           { title: "Appointments", value: appointments.length },
+//           { title: "Pending", value: pending.length },
+//         ].map((card, i) => (
+//           <Grid item xs={12} md={4} key={i}>
+//             <Card
+//               sx={{
+//                 p: 3,
+//                 textAlign: "center",
+//                 borderRadius: 4,
+//                 background: "rgba(255,255,255,0.08)",
+//                 color: "#fff",
+//                 backdropFilter: "blur(20px)",
+//                 boxShadow: "0 0 20px rgba(0,191,255,0.2)",
+//               }}
+//             >
+//               <Typography variant="h6">{card.title}</Typography>
+//               <Typography variant="h3" fontWeight="bold">
+//                 {card.value}
+//               </Typography>
+//             </Card>
+//           </Grid>
+//         ))}
+//       </Grid>
+
+//       {/* 📅 PENDING */}
+//       <Typography variant="h5" sx={{ mt: 5, mb: 2, color: "#00e5ff" }}>
+//         Pending Requests
+//       </Typography>
+
+//       <Grid container spacing={3}>
+//         {pending.map((appt) => (
+//           <Grid item xs={12} md={4} key={appt.id}>
+//             <motion.div whileHover={{ scale: 1.05 }}>
+//               <Card
+//                 sx={{
+//                   p: 3,
+//                   borderRadius: 4,
+//                   background: "rgba(255,255,255,0.10)",
+//                   color: "#fff",
+//                   backdropFilter: "blur(20px)",
+//                 }}
+//               >
+//                 <Typography variant="h6">
+//                   {appt.patient?.name}
+//                 </Typography>
+
+//                 <Chip label={`Age: ${appt.patient?.age}`} sx={{ mt: 1, mr: 1 }} />
+//                 <Chip label={appt.timeSlot} color="info" sx={{ mt: 1 }} />
+
+//                 <Typography sx={{ mt: 2 }}>
+//                   📝 {appt.description}
+//                 </Typography>
+
+//                 <Typography sx={{ mt: 1 }}>
+//                   📄 {appt.report || "No report"}
+//                 </Typography>
+
+//                 <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
+//                   <Button
+//                     variant="contained"
+//                     color="success"
+//                     onClick={() => acceptAppointment(appt.id)}
+//                   >
+//                     Accept
+//                   </Button>
+//                   <Button
+//                     variant="outlined"
+//                     color="error"
+//                     onClick={() => rejectAppointment(appt.id)}
+//                   >
+//                     Reject
+//                   </Button>
+//                 </Box>
+//               </Card>
+//             </motion.div>
+//           </Grid>
+//         ))}
+//       </Grid>
+
+//       {/* ✅ APPROVED */}
+//       <Typography variant="h5" sx={{ mt: 6, mb: 2, color: "#00ff9c" }}>
+//         Approved Appointments
+//       </Typography>
+
+//       <Grid container spacing={3}>
+//         {approved.map((appt) => (
+//           <Grid item xs={12} md={4} key={appt.id}>
+//             <Card
+//               sx={{
+//                 p: 3,
+//                 borderRadius: 4,
+//                 background: "rgba(0,255,150,0.10)",
+//                 color: "#fff",
+//                 backdropFilter: "blur(20px)",
+//                 boxShadow: "0 0 25px rgba(0,255,150,0.25)",
+//               }}
+//             >
+//               <Typography variant="h6">
+//                 {appt.patient?.name}
+//               </Typography>
+//               <Divider sx={{ my: 1, borderColor: "#00ff9c" }} />
+//               <Typography>Age: {appt.patient?.age}</Typography>
+//               <Typography>DOB: {appt.patient?.dob}</Typography>
+//               <Typography>Time: {appt.timeSlot}</Typography>
+//               <Typography>Description: {appt.description}</Typography>
+//             </Card>
+//           </Grid>
+//         ))}
+//       </Grid>
+//     </Box>
+//   );
+// }
+
+
+
+// import { useContext, useEffect, useState } from "react";
+// import axios from "axios";
+// import { AuthContext } from "../context/AuthContext";
+// import DoctorProfileForm from "./DoctorProfileForm";
+// import {
+//   Box,
+//   Typography,
+//   CircularProgress,
+//   Grid,
+//   Avatar,
+//   Card,
+//   CardContent,
+//   Button,
+//   Chip,
+//   Divider,
+// } from "@mui/material";
+// import MenuIcon from "@mui/icons-material/Menu";
+// import CloseIcon from "@mui/icons-material/Close";
+// import LogoutIcon from "@mui/icons-material/Logout";
+// import DashboardIcon from "@mui/icons-material/Dashboard";
+// import EventIcon from "@mui/icons-material/Event";
+// import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+// import PersonIcon from "@mui/icons-material/Person";
+// import { motion, AnimatePresence } from "framer-motion";
+// import { useNavigate } from "react-router-dom";
+
+// // ── Inject styles ──────────────────────────────────────────────────────────────
+// const globalStyles = `
+//   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap');
+//   body { font-family: 'Outfit', sans-serif !important; }
+
+//   .doc-overlay {
+//     position: fixed; inset: 0;
+//     background: rgba(26,31,54,.18);
+//     backdrop-filter: blur(3px);
+//     z-index: 199;
+//     animation: overlayIn .2s ease;
+//   }
+//   @keyframes overlayIn { from{opacity:0}to{opacity:1} }
+
+//   .doc-sidebar {
+//     width: 260px; background: #ffffff;
+//     border-right: 1px solid #e8ecf5;
+//     display: flex; flex-direction: column;
+//     padding: 20px 14px 24px;
+//     position: fixed; top: 0; left: 0;
+//     height: 100vh; z-index: 200;
+//     box-shadow: 4px 0 28px rgba(79,110,247,.12);
+//     transition: transform .28s cubic-bezier(.22,1,.36,1);
+//   }
+//   .doc-sidebar.closed { transform: translateX(-100%); }
+//   .doc-sidebar.open   { transform: translateX(0); }
+
+//   .doc-sidebar-top {
+//     display: flex; align-items: center; justify-content: space-between;
+//     padding: 0 6px 20px;
+//   }
+//   .doc-logo {
+//     font-family: 'Cormorant Garamond', serif;
+//     font-size: 1.4rem; font-weight: 700; color: #4f6ef7;
+//     display: flex; align-items: center; gap: 9px;
+//   }
+//   .doc-logo-icon {
+//     width: 32px; height: 32px; border-radius: 9px;
+//     background: linear-gradient(135deg, #4f6ef7, #7c3aed);
+//     display: flex; align-items: center; justify-content: center;
+//     color: #fff; font-size: .85rem; flex-shrink: 0;
+//   }
+//   .doc-logo-accent { color: #7c3aed; }
+//   .doc-close-btn {
+//     width: 30px; height: 30px; border-radius: 8px;
+//     background: #f5f7ff; border: 1px solid #e8ecf5;
+//     display: flex; align-items: center; justify-content: center;
+//     cursor: pointer; color: #8892b0; transition: all .15s;
+//   }
+//   .doc-close-btn:hover { background: #eef1fe; color: #4f6ef7; border-color: rgba(79,110,247,.2); }
+
+//   .doc-nav-label {
+//     font-size: .67rem; text-transform: uppercase; letter-spacing: 1.2px;
+//     color: #b0b8d0; font-weight: 600; padding: 0 10px; margin: 4px 0 6px;
+//   }
+//   .doc-nav-item {
+//     display: flex; align-items: center; gap: 11px;
+//     padding: 10px 12px; border-radius: 11px; cursor: pointer;
+//     font-size: .875rem; font-weight: 500; color: #4a5278;
+//     transition: all .18s ease; border: 1px solid transparent;
+//     margin-bottom: 3px; user-select: none;
+//   }
+//   .doc-nav-item:hover { background: #eef1fe; color: #4f6ef7; }
+//   .doc-nav-item.active { background: #eef1fe; color: #4f6ef7; font-weight: 600; border-color: rgba(79,110,247,.18); }
+//   .doc-nav-item.active .doc-nav-icon { background: #4f6ef7 !important; color: #fff !important; }
+//   .doc-nav-icon {
+//     width: 30px; height: 30px; border-radius: 8px;
+//     background: #f0f2f8; display: flex; align-items: center; justify-content: center;
+//     flex-shrink: 0; transition: all .18s; color: #4a5278;
+//   }
+//   .doc-sidebar-spacer { flex: 1; }
+//   .doc-user-card {
+//     display: flex; align-items: center; gap: 11px;
+//     padding: 12px; border-radius: 14px;
+//     background: #f5f7ff; border: 1px solid #e8ecf5; margin-bottom: 10px;
+//   }
+//   .doc-user-av {
+//     width: 36px; height: 36px; border-radius: 10px;
+//     background: linear-gradient(135deg, #4f6ef7, #7c3aed);
+//     display: flex; align-items: center; justify-content: center;
+//     font-family: 'Cormorant Garamond', serif; font-weight: 700; color: #fff; font-size: 1.1rem;
+//   }
+
+//   /* top bar */
+//   .doc-topbar {
+//     display: flex; align-items: center; justify-content: space-between;
+//     padding: 13px 24px; background: #fff;
+//     border-bottom: 1px solid #e8ecf5;
+//     box-shadow: 0 1px 8px rgba(79,110,247,.07);
+//     position: sticky; top: 0; z-index: 100;
+//   }
+//   .doc-topbar-left { display: flex; align-items: center; gap: 14px; }
+//   .doc-hamburger {
+//     width: 38px; height: 38px; border-radius: 10px;
+//     background: #f5f7ff; border: 1px solid #e8ecf5;
+//     display: flex; align-items: center; justify-content: center;
+//     cursor: pointer; color: #4f6ef7; transition: all .18s;
+//   }
+//   .doc-hamburger:hover { background: #eef1fe; border-color: rgba(79,110,247,.2); }
+
+//   /* blobs */
+//   .doc-blob { position: fixed; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
+//   .doc-blob-1 { width:500px;height:500px;background:rgba(79,110,247,.07);top:-120px;right:-80px; }
+//   .doc-blob-2 { width:400px;height:400px;background:rgba(124,58,237,.05);bottom:-80px;left:100px; }
+
+//   /* hero */
+//   .doc-hero {
+//     background: linear-gradient(135deg,#fff 55%,#eef1fe 100%) !important;
+//     border: 1px solid #e8ecf5 !important; border-radius: 20px !important;
+//     box-shadow: 0 2px 16px rgba(79,110,247,.08) !important;
+//     padding: 36px 40px !important; position: relative; overflow: hidden;
+//     display: flex; align-items: center; gap: 28px; margin-bottom: 28px;
+//   }
+//   .doc-hero::after { content:'✦'; position:absolute; right:40px; bottom:10px; font-size:5rem; color:rgba(79,110,247,.04); line-height:1; pointer-events:none; }
+
+//   /* stat cards */
+//   .doc-stat {
+//     background: #fff !important; border: 1px solid #e8ecf5 !important;
+//     border-radius: 18px !important; box-shadow: 0 1px 6px rgba(79,110,247,.06) !important;
+//     padding: 24px 28px; position: relative; overflow: hidden;
+//     transition: box-shadow .2s, transform .2s !important;
+//   }
+//   .doc-stat:hover { box-shadow: 0 6px 24px rgba(79,110,247,.13) !important; transform: translateY(-2px); }
+//   .doc-stat-value { font-family:'Cormorant Garamond',serif; font-size:2.6rem; font-weight:700; line-height:1; }
+//   .doc-stat-label { font-size:.72rem; color:#8892b0; text-transform:uppercase; letter-spacing:1px; font-weight:600; margin-bottom:8px; }
+//   .doc-stat-icon  { position:absolute; right:20px; top:50%; transform:translateY(-50%); font-size:2.4rem; opacity:.07; }
+
+//   /* light card */
+//   .doc-card {
+//     background: #fff !important; border: 1px solid #e8ecf5 !important;
+//     border-radius: 18px !important;
+//     box-shadow: 0 1px 4px rgba(79,110,247,.06), 0 2px 12px rgba(0,0,0,.04) !important;
+//     transition: box-shadow .22s, border-color .22s, transform .22s !important;
+//   }
+//   .doc-card:hover { box-shadow: 0 4px 24px rgba(79,110,247,.12) !important; border-color: #d4daf0 !important; }
+
+//   /* pending card accent */
+//   .doc-pending-card {
+//     background: #fff !important; border: 1px solid #e8ecf5 !important;
+//     border-left: 4px solid #f59e0b !important;
+//     border-radius: 18px !important;
+//     box-shadow: 0 1px 6px rgba(245,158,11,.08) !important;
+//     transition: box-shadow .22s, transform .22s !important;
+//   }
+//   .doc-pending-card:hover { box-shadow: 0 6px 24px rgba(245,158,11,.14) !important; transform: translateY(-3px); }
+
+//   /* approved card accent */
+//   .doc-approved-card {
+//     background: #fff !important; border: 1px solid #e8ecf5 !important;
+//     border-left: 4px solid #059669 !important;
+//     border-radius: 18px !important;
+//     box-shadow: 0 1px 6px rgba(5,150,105,.08) !important;
+//     transition: box-shadow .22s, transform .22s !important;
+//   }
+//   .doc-approved-card:hover { box-shadow: 0 6px 24px rgba(5,150,105,.14) !important; transform: translateY(-3px); }
+
+//   /* section heading */
+//   .doc-sec-heading {
+//     font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:700; color:#1a1f36;
+//     display:flex; align-items:center; gap:12px; margin-bottom:16px;
+//   }
+//   .doc-sec-heading::after { content:''; flex:1; height:1px; background:#e8ecf5; }
+
+//   .av-blue   { background: linear-gradient(135deg,#4f6ef7,#818cf8) !important; }
+//   .av-violet { background: linear-gradient(135deg,#7c3aed,#a78bfa) !important; }
+//   .av-teal   { background: linear-gradient(135deg,#0891b2,#22d3ee) !important; }
+//   .av-amber  { background: linear-gradient(135deg,#d97706,#fbbf24) !important; }
+//   .av-green  { background: linear-gradient(135deg,#059669,#34d399) !important; }
+
+//   @keyframes fadeUp { from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);} }
+//   .fu { animation: fadeUp .4s cubic-bezier(.22,1,.36,1) both; }
+// `;
+
+// if (!document.getElementById("doctor-portal-styles")) {
+//   const s = document.createElement("style");
+//   s.id = "doctor-portal-styles";
+//   s.textContent = globalStyles;
+//   document.head.appendChild(s);
+// }
+
+// // ── NavItem ────────────────────────────────────────────────────────────────────
+// function NavItem({ icon, label, active, onClick }) {
+//   return (
+//     <div className={`doc-nav-item ${active ? "active" : ""}`} onClick={onClick}>
+//       <div className="doc-nav-icon">{icon}</div>
+//       {label}
+//     </div>
+//   );
+// }
+
+// // ── StatCard ───────────────────────────────────────────────────────────────────
+// function StatCard({ label, value, icon, color }) {
+//   return (
+//     <div className="doc-stat fu">
+//       <div className="doc-stat-label">{label}</div>
+//       <div className="doc-stat-value" style={{ color }}>{value}</div>
+//       <div className="doc-stat-icon">{icon}</div>
+//     </div>
+//   );
+// }
+
+// // ── Main ───────────────────────────────────────────────────────────────────────
+// export default function DoctorDashboard() {
+//   const { user, logout } = useContext(AuthContext);
+//   const userId = user?.id || localStorage.getItem("userId");
+//   const navigate = useNavigate();
+
+//   const [doctor,         setDoctor]         = useState(null);
+//   const [patients,       setPatients]       = useState([]);
+//   const [appointments,   setAppointments]   = useState([]);
+//   const [loading,        setLoading]        = useState(true);
+//   const [profileMissing, setProfileMissing] = useState(false);
+//   const [sidebarOpen,    setSidebarOpen]    = useState(false);
+//   const [view,           setView]           = useState("dashboard");
+
+//   // ── UNCHANGED fetch ──
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const docRes = await axios.get(`http://localhost:8080/doctor/user/${userId}`);
+//         if (!docRes.data) { setProfileMissing(true); return; }
+//         const doctorData = docRes.data;
+//         setDoctor(doctorData);
+//         const [patRes, appRes] = await Promise.all([
+//           axios.get(`http://localhost:8080/doctor/${doctorData.id}/patients`),
+//           axios.get(`http://localhost:8080/appointments/doctor/${doctorData.id}`),
+//         ]);
+//         setPatients(patRes.data);
+//         setAppointments(appRes.data);
+//       } catch (err) {
+//         console.error(err);
+//         setProfileMissing(true);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+//     if (userId) fetchData();
+//   }, [userId]);
+
+//   // ── UNCHANGED handlers ──
+//   const acceptAppointment = async (id) => {
+//     await axios.put(`http://localhost:8080/appointments/${id}/approve`);
+//     setAppointments((prev) => prev.map((a) => (a.id === id ? { ...a, status: "APPROVED" } : a)));
+//   };
+
+//   const rejectAppointment = async (id) => {
+//     await axios.put(`http://localhost:8080/appointments/${id}/reject`);
+//     setAppointments((prev) => prev.filter((a) => a.id !== id));
+//   };
+
+//   const handleLogout = () => { logout(); navigate("/"); };
+//   const handleNavClick = (key) => { setView(key); setSidebarOpen(false); };
+
+//   // ── Profile missing ──
+//   if (profileMissing) {
+//     return (
+//       <DoctorProfileForm userId={userId} onCreated={(doc) => { setDoctor(doc); setProfileMissing(false); }} />
+//     );
+//   }
+
+//   if (loading) return (
+//     <Box sx={{ display:"flex", alignItems:"center", justifyContent:"center", minHeight:"100vh", background:"#f5f7ff" }}>
+//       <CircularProgress sx={{ color:"#4f6ef7" }} />
+//     </Box>
+//   );
+
+//   const pending  = appointments.filter((a) => a.status === "PENDING");
+//   const approved = appointments.filter((a) => a.status === "APPROVED");
+
+//   const menuItems = [
+//     { key: "dashboard", label: "Dashboard",           icon: <DashboardIcon   sx={{ fontSize:18 }} /> },
+//     { key: "pending",   label: "Pending Requests",    icon: <EventIcon       sx={{ fontSize:18 }} /> },
+//     { key: "approved",  label: "Approved Appointments", icon: <CheckCircleIcon sx={{ fontSize:18 }} /> },
+//     { key: "profile",   label: "My Profile",          icon: <PersonIcon      sx={{ fontSize:18 }} /> },
+//   ];
+
+//   return (
+//     <Box sx={{ minHeight:"100vh", background:"#f5f7ff", fontFamily:"'Outfit',sans-serif" }}>
+//       <div className="doc-blob doc-blob-1" />
+//       <div className="doc-blob doc-blob-2" />
+
+//       {/* Overlay */}
+//       {sidebarOpen && <div className="doc-overlay" onClick={() => setSidebarOpen(false)} />}
+
+//       {/* ── Sidebar ── */}
+//       <div className={`doc-sidebar ${sidebarOpen ? "open" : "closed"}`}>
+//         <div className="doc-sidebar-top">
+//           <div className="doc-logo">
+//             <div className="doc-logo-icon">✦</div>
+//             Med<span className="doc-logo-accent">Vault</span>
+//           </div>
+//           <div className="doc-close-btn" onClick={() => setSidebarOpen(false)}>
+//             <CloseIcon sx={{ fontSize:16 }} />
+//           </div>
+//         </div>
+
+//         <div className="doc-nav-label">Navigation</div>
+
+//         {menuItems.map((item) => (
+//           <NavItem key={item.key} icon={item.icon} label={item.label}
+//             active={view === item.key} onClick={() => handleNavClick(item.key)} />
+//         ))}
+
+//         <div className="doc-sidebar-spacer" />
+
+//         <div className="doc-user-card">
+//           <div className="doc-user-av">{doctor?.name?.charAt(0)}</div>
+//           <Box>
+//             <Typography sx={{ fontSize:".85rem", fontWeight:600, color:"#1a1f36", lineHeight:1.2 }}>Dr. {doctor?.name}</Typography>
+//             <Typography sx={{ fontSize:".72rem", color:"#8892b0" }}>{doctor?.specialization}</Typography>
+//           </Box>
+//         </div>
+
+//         <button onClick={handleLogout}
+//           style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 12px", borderRadius:11,
+//                    cursor:"pointer", fontSize:".875rem", fontWeight:500, color:"#e11d48",
+//                    border:"1px solid transparent", background:"none", width:"100%",
+//                    fontFamily:"'Outfit',sans-serif", transition:"all .18s" }}
+//           onMouseEnter={e => { e.currentTarget.style.background="#fff1f3"; e.currentTarget.style.borderColor="rgba(225,29,72,.15)"; }}
+//           onMouseLeave={e => { e.currentTarget.style.background="none";    e.currentTarget.style.borderColor="transparent"; }}>
+//           <div className="doc-nav-icon" style={{ background:"#fff1f3", color:"#e11d48" }}>
+//             <LogoutIcon sx={{ fontSize:16 }} />
+//           </div>
+//           Sign Out
+//         </button>
+//       </div>
+
+//       {/* ── Top bar ── */}
+//       <div className="doc-topbar">
+//         <div className="doc-topbar-left">
+//           <div className="doc-hamburger" onClick={() => setSidebarOpen(true)}>
+//             <MenuIcon sx={{ fontSize:20 }} />
+//           </div>
+//           <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontWeight:700, fontSize:"1.3rem", color:"#4f6ef7" }}>
+//             Med<span style={{ color:"#7c3aed" }}>Vault</span>
+//           </Typography>
+//         </div>
+//         <Button startIcon={<LogoutIcon />} onClick={handleLogout} size="small"
+//           sx={{ color:"#e11d48", borderColor:"rgba(225,29,72,.3)", textTransform:"none",
+//                 borderRadius:2, border:"1px solid", fontFamily:"'Outfit',sans-serif" }}>
+//           Logout
+//         </Button>
+//       </div>
+
+//       {/* ── Page content ── */}
+//       <Box sx={{ p:{ xs:2, md:"36px 44px" }, position:"relative", zIndex:1 }}>
+//         <AnimatePresence mode="wait">
+//           <motion.div key={view}
+//             initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }}
+//             exit={{ opacity:0, y:-20 }} transition={{ duration:0.3 }}>
+
+//             {/* ── DASHBOARD ── */}
+//             {view === "dashboard" && (
+//               <>
+//                 <Box sx={{ mb:4 }}>
+//                   <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:700, color:"#1a1f36" }}>
+//                     Welcome, Dr. {doctor?.name?.split(" ")[0]} 👨‍⚕️
+//                   </Typography>
+//                   <Typography sx={{ color:"#8892b0", fontSize:".875rem", mt:.5 }}>
+//                     Here's your practice overview for today
+//                   </Typography>
+//                 </Box>
+
+//                 {/* Hero */}
+//                 <div className="doc-hero">
+//                   <Avatar className="av-blue"
+//                     sx={{ width:80, height:80, borderRadius:"22px", fontSize:"2rem",
+//                           fontFamily:"'Cormorant Garamond',serif", fontWeight:700,
+//                           boxShadow:"0 8px 24px rgba(79,110,247,.3)", flexShrink:0 }}>
+//                     {doctor?.name?.charAt(0)}
+//                   </Avatar>
+//                   <Box>
+//                     <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.8rem", fontWeight:700, color:"#1a1f36" }}>
+//                       Dr. {doctor?.name}
+//                     </Typography>
+//                     <Typography sx={{ color:"#8892b0", fontSize:".82rem", mt:.5 }}>{doctor?.specialization}</Typography>
+//                     <Box sx={{ display:"flex", gap:1, mt:1.5, flexWrap:"wrap" }}>
+//                       {[`📞 ${doctor?.contact}`, `🏥 ${doctor?.hospital}`].map((v, i) => (
+//                         <Chip key={i} label={v} size="small"
+//                           sx={{ background:"#eef1fe", color:"#4f6ef7", border:"1px solid rgba(79,110,247,.18)", fontWeight:500, fontSize:".75rem" }} />
+//                       ))}
+//                     </Box>
+//                   </Box>
+//                 </div>
+
+//                 {/* Stats */}
+//                 <Grid container spacing={2.5} sx={{ mb:4 }}>
+//                   <Grid item xs={12} sm={4}><StatCard label="Total Patients"      value={patients.length}     icon="👥" color="#4f6ef7" /></Grid>
+//                   <Grid item xs={12} sm={4}><StatCard label="Total Appointments"  value={appointments.length} icon="📅" color="#7c3aed" /></Grid>
+//                   <Grid item xs={12} sm={4}><StatCard label="Pending Requests"    value={pending.length}      icon="⏳" color="#d97706" /></Grid>
+//                 </Grid>
+
+//                 {/* Recent pending preview */}
+//                 {pending.length > 0 && (
+//                   <>
+//                     <div className="doc-sec-heading">Pending Requests</div>
+//                     <Grid container spacing={2.5}>
+//                       {pending.slice(0, 3).map((appt, i) => (
+//                         <Grid item xs={12} md={4} key={appt.id}>
+//                           <motion.div whileHover={{ scale:1.02 }}>
+//                             <Card className="doc-pending-card">
+//                               <CardContent sx={{ p:"22px !important" }}>
+//                                 <Box sx={{ display:"flex", alignItems:"center", gap:1.5, mb:1.5 }}>
+//                                   <Avatar className="av-amber"
+//                                     sx={{ width:44, height:44, borderRadius:"12px", fontSize:"1rem", fontWeight:700 }}>
+//                                     {appt.patient?.name?.charAt(0)}
+//                                   </Avatar>
+//                                   <Box>
+//                                     <Typography sx={{ fontWeight:600, fontSize:".92rem", color:"#1a1f36" }}>{appt.patient?.name}</Typography>
+//                                     <Typography sx={{ fontSize:".76rem", color:"#8892b0" }}>Age {appt.patient?.age}</Typography>
+//                                   </Box>
+//                                 </Box>
+//                                 <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.6 }}>🕐 {appt.timeSlot}</Typography>
+//                                 <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:1.5 }}>📝 {appt.description}</Typography>
+//                                 <Box sx={{ display:"flex", gap:1 }}>
+//                                   <Button size="small" variant="contained"
+//                                     onClick={() => acceptAppointment(appt.id)}
+//                                     sx={{ background:"linear-gradient(135deg,#059669,#34d399)", borderRadius:"8px",
+//                                           textTransform:"none", fontWeight:600, fontSize:".78rem",
+//                                           boxShadow:"0 2px 8px rgba(5,150,105,.25)" }}>
+//                                     Accept
+//                                   </Button>
+//                                   <Button size="small" variant="outlined"
+//                                     onClick={() => rejectAppointment(appt.id)}
+//                                     sx={{ borderColor:"rgba(225,29,72,.3)", color:"#e11d48", borderRadius:"8px",
+//                                           textTransform:"none", fontWeight:600, fontSize:".78rem",
+//                                           "&:hover":{ background:"#fff1f3", borderColor:"#e11d48" } }}>
+//                                     Reject
+//                                   </Button>
+//                                 </Box>
+//                               </CardContent>
+//                             </Card>
+//                           </motion.div>
+//                         </Grid>
+//                       ))}
+//                     </Grid>
+//                   </>
+//                 )}
+//               </>
+//             )}
+
+//             {/* ── PENDING ── */}
+//             {view === "pending" && (
+//               <>
+//                 <Box sx={{ mb:4 }}>
+//                   <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:700, color:"#1a1f36" }}>
+//                     Pending Requests
+//                   </Typography>
+//                   <Typography sx={{ color:"#8892b0", fontSize:".875rem", mt:.5 }}>
+//                     {pending.length} request{pending.length !== 1 ? "s" : ""} awaiting your response
+//                   </Typography>
+//                 </Box>
+
+//                 {pending.length === 0 ? (
+//                   <Box sx={{ textAlign:"center", py:8, color:"#8892b0" }}>
+//                     <Typography sx={{ fontSize:"2.5rem", mb:1 }}>🎉</Typography>
+//                     <Typography sx={{ fontWeight:500 }}>No pending requests!</Typography>
+//                   </Box>
+//                 ) : (
+//                   <Grid container spacing={2.5}>
+//                     {pending.map((appt) => (
+//                       <Grid item xs={12} md={4} key={appt.id}>
+//                         <motion.div whileHover={{ scale:1.02 }}>
+//                           <Card className="doc-pending-card">
+//                             <CardContent sx={{ p:"24px !important" }}>
+//                               <Box sx={{ display:"flex", alignItems:"center", gap:1.5, mb:2 }}>
+//                                 <Avatar className="av-amber"
+//                                   sx={{ width:48, height:48, borderRadius:"14px", fontSize:"1.1rem", fontWeight:700 }}>
+//                                   {appt.patient?.name?.charAt(0)}
+//                                 </Avatar>
+//                                 <Box>
+//                                   <Typography sx={{ fontWeight:600, fontSize:".95rem", color:"#1a1f36" }}>{appt.patient?.name}</Typography>
+//                                   <Typography sx={{ fontSize:".76rem", color:"#8892b0" }}>Age {appt.patient?.age}</Typography>
+//                                 </Box>
+//                                 <Chip label="Pending" size="small"
+//                                   sx={{ ml:"auto", background:"#fffbeb", color:"#d97706", border:"1px solid rgba(217,119,6,.2)", fontWeight:600, fontSize:".7rem" }} />
+//                               </Box>
+//                               <Divider sx={{ mb:1.5, borderColor:"#f0f2f8" }} />
+//                               <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.6 }}>🕐 {appt.timeSlot}</Typography>
+//                               <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.6 }}>📝 {appt.description}</Typography>
+//                               <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:2 }}>📄 {appt.report || "No report attached"}</Typography>
+//                               <Box sx={{ display:"flex", gap:1 }}>
+//                                 <Button variant="contained" onClick={() => acceptAppointment(appt.id)}
+//                                   sx={{ background:"linear-gradient(135deg,#059669,#34d399)", borderRadius:"9px",
+//                                         textTransform:"none", fontWeight:600, fontSize:".83rem",
+//                                         boxShadow:"0 3px 10px rgba(5,150,105,.25)", flex:1 }}>
+//                                   ✓ Accept
+//                                 </Button>
+//                                 <Button variant="outlined" onClick={() => rejectAppointment(appt.id)}
+//                                   sx={{ borderColor:"rgba(225,29,72,.3)", color:"#e11d48", borderRadius:"9px",
+//                                         textTransform:"none", fontWeight:600, fontSize:".83rem", flex:1,
+//                                         "&:hover":{ background:"#fff1f3", borderColor:"#e11d48" } }}>
+//                                   ✕ Reject
+//                                 </Button>
+//                               </Box>
+//                             </CardContent>
+//                           </Card>
+//                         </motion.div>
+//                       </Grid>
+//                     ))}
+//                   </Grid>
+//                 )}
+//               </>
+//             )}
+
+//             {/* ── APPROVED ── */}
+//             {view === "approved" && (
+//               <>
+//                 <Box sx={{ mb:4 }}>
+//                   <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:700, color:"#1a1f36" }}>
+//                     Approved Appointments
+//                   </Typography>
+//                   <Typography sx={{ color:"#8892b0", fontSize:".875rem", mt:.5 }}>
+//                     {approved.length} confirmed appointment{approved.length !== 1 ? "s" : ""}
+//                   </Typography>
+//                 </Box>
+
+//                 {approved.length === 0 ? (
+//                   <Box sx={{ textAlign:"center", py:8, color:"#8892b0" }}>
+//                     <Typography sx={{ fontSize:"2.5rem", mb:1 }}>📋</Typography>
+//                     <Typography sx={{ fontWeight:500 }}>No approved appointments yet.</Typography>
+//                   </Box>
+//                 ) : (
+//                   <Grid container spacing={2.5}>
+//                     {approved.map((appt, i) => (
+//                       <Grid item xs={12} md={4} key={appt.id}>
+//                         <motion.div whileHover={{ scale:1.02 }}>
+//                           <Card className="doc-approved-card">
+//                             <CardContent sx={{ p:"24px !important" }}>
+//                               <Box sx={{ display:"flex", alignItems:"center", gap:1.5, mb:2 }}>
+//                                 <Avatar className="av-green"
+//                                   sx={{ width:48, height:48, borderRadius:"14px", fontSize:"1.1rem", fontWeight:700 }}>
+//                                   {appt.patient?.name?.charAt(0)}
+//                                 </Avatar>
+//                                 <Box>
+//                                   <Typography sx={{ fontWeight:600, fontSize:".95rem", color:"#1a1f36" }}>{appt.patient?.name}</Typography>
+//                                   <Typography sx={{ fontSize:".76rem", color:"#8892b0" }}>Age {appt.patient?.age}</Typography>
+//                                 </Box>
+//                                 <Chip label="Approved" size="small"
+//                                   sx={{ ml:"auto", background:"#ecfdf5", color:"#059669", border:"1px solid rgba(5,150,105,.2)", fontWeight:600, fontSize:".7rem" }} />
+//                               </Box>
+//                               <Divider sx={{ mb:1.5, borderColor:"#f0f2f8" }} />
+//                               <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.6 }}>🎂 DOB: {appt.patient?.dob || "—"}</Typography>
+//                               <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.6 }}>🕐 {appt.timeSlot}</Typography>
+//                               <Typography sx={{ fontSize:".82rem", color:"#4a5278" }}>📝 {appt.description}</Typography>
+//                             </CardContent>
+//                           </Card>
+//                         </motion.div>
+//                       </Grid>
+//                     ))}
+//                   </Grid>
+//                 )}
+//               </>
+//             )}
+
+//             {/* ── PROFILE ── */}
+//             {view === "profile" && (
+//               <>
+//                 <Box sx={{ mb:4 }}>
+//                   <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:700, color:"#1a1f36" }}>
+//                     My Profile
+//                   </Typography>
+//                   <Typography sx={{ color:"#8892b0", fontSize:".875rem", mt:.5 }}>Your professional details</Typography>
+//                 </Box>
+//                 <Card className="doc-card" sx={{ p:4 }}>
+//                   <Box sx={{ display:"flex", alignItems:"center", gap:2.5, mb:3 }}>
+//                     <Avatar className="av-blue"
+//                       sx={{ width:76, height:76, borderRadius:"22px", fontSize:"2rem",
+//                             fontFamily:"'Cormorant Garamond',serif", fontWeight:700,
+//                             boxShadow:"0 6px 20px rgba(79,110,247,.25)" }}>
+//                       {doctor?.name?.charAt(0)}
+//                     </Avatar>
+//                     <Box>
+//                       <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.6rem", fontWeight:700, color:"#1a1f36" }}>
+//                         Dr. {doctor?.name}
+//                       </Typography>
+//                       <Typography sx={{ fontSize:".82rem", color:"#8892b0", mt:.5 }}>Doctor Account · Active</Typography>
+//                     </Box>
+//                   </Box>
+//                   <Divider sx={{ mb:3, borderColor:"#e8ecf5" }} />
+//                   <Grid container spacing={3}>
+//                     {[
+//                       ["Full Name",       `Dr. ${doctor?.name}`],
+//                       ["Specialization",  doctor?.specialization],
+//                       ["Contact",         doctor?.contact],
+//                       ["Hospital",        doctor?.hospital],
+//                       ["Doctor ID",       `#${doctor?.id}`],
+//                     ].map(([label, val]) => (
+//                       <Grid item xs={12} sm={6} key={label}>
+//                         <Typography sx={{ fontSize:".7rem", textTransform:"uppercase", letterSpacing:"1.1px", color:"#8892b0", fontWeight:600, mb:.6 }}>
+//                           {label}
+//                         </Typography>
+//                         <Typography sx={{ fontSize:".95rem", fontWeight:500, color:"#1a1f36" }}>{val || "—"}</Typography>
+//                       </Grid>
+//                     ))}
+//                   </Grid>
+//                 </Card>
+//               </>
+//             )}
+
+//           </motion.div>
+//         </AnimatePresence>
+//       </Box>
+//     </Box>
+//   );
+// }
+
+
+// import { useContext, useEffect, useState } from "react";
+// import axios from "axios";
+// import { AuthContext } from "../context/AuthContext";
+// import DoctorProfileForm from "./DoctorProfileForm";
+// import {
+//   Box,
+//   Typography,
+//   CircularProgress,
+//   Grid,
+//   Avatar,
+//   Card,
+//   CardContent,
+//   Button,
+//   Chip,
+//   Divider,
+//   Modal,
+//   IconButton,
+// } from "@mui/material";
+// import MenuIcon from "@mui/icons-material/Menu";
+// import CloseIcon from "@mui/icons-material/Close";
+// import LogoutIcon from "@mui/icons-material/Logout";
+// import DashboardIcon from "@mui/icons-material/Dashboard";
+// import EventIcon from "@mui/icons-material/Event";
+// import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+// import PersonIcon from "@mui/icons-material/Person";
+// import FolderSharedIcon from "@mui/icons-material/FolderShared";
+// import DescriptionIcon from "@mui/icons-material/Description";
+// import { motion, AnimatePresence } from "framer-motion";
+// import { useNavigate } from "react-router-dom";
+
+// // ── Styles ─────────────────────────────────────────────────────────────────────
+// const globalStyles = `
+//   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap');
+//   body { font-family: 'Outfit', sans-serif !important; }
+
+//   .doc-overlay {
+//     position: fixed; inset: 0;
+//     background: rgba(26,31,54,.18); backdrop-filter: blur(3px);
+//     z-index: 199; animation: overlayIn .2s ease;
+//   }
+//   @keyframes overlayIn { from{opacity:0}to{opacity:1} }
+
+//   .doc-sidebar {
+//     width: 260px; background: #ffffff;
+//     border-right: 1px solid #e8ecf5;
+//     display: flex; flex-direction: column;
+//     padding: 20px 14px 24px;
+//     position: fixed; top: 0; left: 0;
+//     height: 100vh; z-index: 200;
+//     box-shadow: 4px 0 28px rgba(79,110,247,.12);
+//     transition: transform .28s cubic-bezier(.22,1,.36,1);
+//   }
+//   .doc-sidebar.closed { transform: translateX(-100%); }
+//   .doc-sidebar.open   { transform: translateX(0); }
+
+//   .doc-sidebar-top {
+//     display: flex; align-items: center; justify-content: space-between;
+//     padding: 0 6px 20px;
+//   }
+//   .doc-logo {
+//     font-family: 'Cormorant Garamond', serif;
+//     font-size: 1.4rem; font-weight: 700; color: #4f6ef7;
+//     display: flex; align-items: center; gap: 9px;
+//   }
+//   .doc-logo-icon {
+//     width: 32px; height: 32px; border-radius: 9px;
+//     background: linear-gradient(135deg, #4f6ef7, #7c3aed);
+//     display: flex; align-items: center; justify-content: center;
+//     color: #fff; font-size: .85rem; flex-shrink: 0;
+//   }
+//   .doc-logo-accent { color: #7c3aed; }
+//   .doc-close-btn {
+//     width: 30px; height: 30px; border-radius: 8px;
+//     background: #f5f7ff; border: 1px solid #e8ecf5;
+//     display: flex; align-items: center; justify-content: center;
+//     cursor: pointer; color: #8892b0; transition: all .15s;
+//   }
+//   .doc-close-btn:hover { background: #eef1fe; color: #4f6ef7; border-color: rgba(79,110,247,.2); }
+
+//   .doc-nav-label {
+//     font-size: .67rem; text-transform: uppercase; letter-spacing: 1.2px;
+//     color: #b0b8d0; font-weight: 600; padding: 0 10px; margin: 4px 0 6px;
+//   }
+//   .doc-nav-item {
+//     display: flex; align-items: center; gap: 11px;
+//     padding: 10px 12px; border-radius: 11px; cursor: pointer;
+//     font-size: .875rem; font-weight: 500; color: #4a5278;
+//     transition: all .18s ease; border: 1px solid transparent;
+//     margin-bottom: 3px; user-select: none;
+//   }
+//   .doc-nav-item:hover { background: #eef1fe; color: #4f6ef7; }
+//   .doc-nav-item.active { background: #eef1fe; color: #4f6ef7; font-weight: 600; border-color: rgba(79,110,247,.18); }
+//   .doc-nav-item.active .doc-nav-icon { background: #4f6ef7 !important; color: #fff !important; }
+//   .doc-nav-icon {
+//     width: 30px; height: 30px; border-radius: 8px;
+//     background: #f0f2f8; display: flex; align-items: center; justify-content: center;
+//     flex-shrink: 0; transition: all .18s; color: #4a5278;
+//   }
+//   .doc-sidebar-spacer { flex: 1; }
+//   .doc-user-card {
+//     display: flex; align-items: center; gap: 11px;
+//     padding: 12px; border-radius: 14px;
+//     background: #f5f7ff; border: 1px solid #e8ecf5; margin-bottom: 10px;
+//   }
+//   .doc-user-av {
+//     width: 36px; height: 36px; border-radius: 10px;
+//     background: linear-gradient(135deg, #4f6ef7, #7c3aed);
+//     display: flex; align-items: center; justify-content: center;
+//     font-family: 'Cormorant Garamond', serif; font-weight: 700; color: #fff; font-size: 1.1rem;
+//   }
+
+//   .doc-topbar {
+//     display: flex; align-items: center; justify-content: space-between;
+//     padding: 13px 24px; background: #fff;
+//     border-bottom: 1px solid #e8ecf5;
+//     box-shadow: 0 1px 8px rgba(79,110,247,.07);
+//     position: sticky; top: 0; z-index: 100;
+//   }
+//   .doc-topbar-left { display: flex; align-items: center; gap: 14px; }
+//   .doc-hamburger {
+//     width: 38px; height: 38px; border-radius: 10px;
+//     background: #f5f7ff; border: 1px solid #e8ecf5;
+//     display: flex; align-items: center; justify-content: center;
+//     cursor: pointer; color: #4f6ef7; transition: all .18s;
+//   }
+//   .doc-hamburger:hover { background: #eef1fe; border-color: rgba(79,110,247,.2); }
+
+//   .doc-blob { position: fixed; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
+//   .doc-blob-1 { width:500px;height:500px;background:rgba(79,110,247,.07);top:-120px;right:-80px; }
+//   .doc-blob-2 { width:400px;height:400px;background:rgba(124,58,237,.05);bottom:-80px;left:100px; }
+
+//   .doc-hero {
+//     background: linear-gradient(135deg,#fff 55%,#eef1fe 100%) !important;
+//     border: 1px solid #e8ecf5 !important; border-radius: 20px !important;
+//     box-shadow: 0 2px 16px rgba(79,110,247,.08) !important;
+//     padding: 36px 40px !important; position: relative; overflow: hidden;
+//     display: flex; align-items: center; gap: 28px; margin-bottom: 28px;
+//   }
+//   .doc-hero::after { content:'✦'; position:absolute; right:40px; bottom:10px; font-size:5rem; color:rgba(79,110,247,.04); line-height:1; pointer-events:none; }
+
+//   .doc-stat {
+//     background: #fff !important; border: 1px solid #e8ecf5 !important;
+//     border-radius: 18px !important; box-shadow: 0 1px 6px rgba(79,110,247,.06) !important;
+//     padding: 24px 28px; position: relative; overflow: hidden;
+//     transition: box-shadow .2s, transform .2s !important;
+//   }
+//   .doc-stat:hover { box-shadow: 0 6px 24px rgba(79,110,247,.13) !important; transform: translateY(-2px); }
+//   .doc-stat-value { font-family:'Cormorant Garamond',serif; font-size:2.6rem; font-weight:700; line-height:1; }
+//   .doc-stat-label { font-size:.72rem; color:#8892b0; text-transform:uppercase; letter-spacing:1px; font-weight:600; margin-bottom:8px; }
+//   .doc-stat-icon  { position:absolute; right:20px; top:50%; transform:translateY(-50%); font-size:2.4rem; opacity:.07; }
+
+//   .doc-card {
+//     background: #fff !important; border: 1px solid #e8ecf5 !important;
+//     border-radius: 18px !important;
+//     box-shadow: 0 1px 4px rgba(79,110,247,.06), 0 2px 12px rgba(0,0,0,.04) !important;
+//     transition: box-shadow .22s, border-color .22s, transform .22s !important;
+//   }
+//   .doc-card:hover { box-shadow: 0 4px 24px rgba(79,110,247,.12) !important; border-color: #d4daf0 !important; }
+
+//   .doc-pending-card {
+//     background: #fff !important; border: 1px solid #e8ecf5 !important;
+//     border-left: 4px solid #f59e0b !important; border-radius: 18px !important;
+//     box-shadow: 0 1px 6px rgba(245,158,11,.08) !important;
+//     transition: box-shadow .22s, transform .22s !important;
+//   }
+//   .doc-pending-card:hover { box-shadow: 0 6px 24px rgba(245,158,11,.14) !important; transform: translateY(-3px); }
+
+//   .doc-approved-card {
+//     background: #fff !important; border: 1px solid #e8ecf5 !important;
+//     border-left: 4px solid #059669 !important; border-radius: 18px !important;
+//     box-shadow: 0 1px 6px rgba(5,150,105,.08) !important;
+//     transition: box-shadow .22s, transform .22s !important;
+//   }
+//   .doc-approved-card:hover { box-shadow: 0 6px 24px rgba(5,150,105,.14) !important; transform: translateY(-3px); }
+
+//   /* ── Patient record card ── */
+//   .doc-patient-card {
+//     background: #fff !important; border: 1px solid #e8ecf5 !important;
+//     border-left: 4px solid #4f6ef7 !important; border-radius: 18px !important;
+//     box-shadow: 0 1px 6px rgba(79,110,247,.08) !important;
+//     transition: box-shadow .22s, transform .22s, border-color .22s !important;
+//     cursor: pointer;
+//   }
+//   .doc-patient-card:hover { box-shadow: 0 6px 28px rgba(79,110,247,.16) !important; transform: translateY(-3px); border-color: #c7cee8 !important; }
+
+//   /* ── Report badge ── */
+//   .report-badge {
+//     display: inline-flex; align-items: center; gap: 5px;
+//     padding: 4px 10px; border-radius: 8px;
+//     font-size: .75rem; font-weight: 500;
+//     background: #eef1fe; color: #4f6ef7;
+//     border: 1px solid rgba(79,110,247,.18);
+//     text-decoration: none; cursor: pointer;
+//     transition: all .15s;
+//   }
+//   .report-badge:hover { background: #e0e8ff; }
+//   .report-badge.no-report { background: #f5f7ff; color: #8892b0; border-color: #e8ecf5; cursor: default; }
+
+//   /* ── Modal ── */
+//   .patient-modal-box {
+//     position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+//     width: 90%; max-width: 540px;
+//     background: #fff; border-radius: 22px;
+//     border: 1px solid #e8ecf5;
+//     box-shadow: 0 20px 60px rgba(79,110,247,.18);
+//     padding: 36px; outline: none;
+//     max-height: 90vh; overflow-y: auto;
+//   }
+//   .modal-field-label {
+//     font-size: .68rem; text-transform: uppercase; letter-spacing: 1px;
+//     color: #8892b0; font-weight: 600; margin-bottom: 5px;
+//   }
+//   .modal-field-value {
+//     font-size: .92rem; font-weight: 500; color: #1a1f36; margin-bottom: 16px;
+//   }
+
+//   .doc-sec-heading {
+//     font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:700; color:#1a1f36;
+//     display:flex; align-items:center; gap:12px; margin-bottom:16px;
+//   }
+//   .doc-sec-heading::after { content:''; flex:1; height:1px; background:#e8ecf5; }
+
+//   .av-blue   { background: linear-gradient(135deg,#4f6ef7,#818cf8) !important; }
+//   .av-violet { background: linear-gradient(135deg,#7c3aed,#a78bfa) !important; }
+//   .av-teal   { background: linear-gradient(135deg,#0891b2,#22d3ee) !important; }
+//   .av-amber  { background: linear-gradient(135deg,#d97706,#fbbf24) !important; }
+//   .av-green  { background: linear-gradient(135deg,#059669,#34d399) !important; }
+
+//   @keyframes fadeUp { from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);} }
+//   .fu { animation: fadeUp .4s cubic-bezier(.22,1,.36,1) both; }
+// `;
+
+// if (!document.getElementById("doctor-portal-styles")) {
+//   const s = document.createElement("style");
+//   s.id = "doctor-portal-styles";
+//   s.textContent = globalStyles;
+//   document.head.appendChild(s);
+// }
+
+// function NavItem({ icon, label, active, onClick }) {
+//   return (
+//     <div className={`doc-nav-item ${active ? "active" : ""}`} onClick={onClick}>
+//       <div className="doc-nav-icon">{icon}</div>
+//       {label}
+//     </div>
+//   );
+// }
+
+// function StatCard({ label, value, icon, color }) {
+//   return (
+//     <div className="doc-stat fu">
+//       <div className="doc-stat-label">{label}</div>
+//       <div className="doc-stat-value" style={{ color }}>{value}</div>
+//       <div className="doc-stat-icon">{icon}</div>
+//     </div>
+//   );
+// }
+
+// // ── Patient Detail Modal ───────────────────────────────────────────────────────
+// function PatientModal({ appt, open, onClose }) {
+//   if (!appt) return null;
+//   const p = appt.patient;
+//   return (
+//     <Modal open={open} onClose={onClose}>
+//       <Box className="patient-modal-box">
+//         {/* Header */}
+//         <Box sx={{ display:"flex", alignItems:"center", justifyContent:"space-between", mb:3 }}>
+//           <Box sx={{ display:"flex", alignItems:"center", gap:2 }}>
+//             <Avatar className="av-blue"
+//               sx={{ width:54, height:54, borderRadius:"16px", fontSize:"1.4rem",
+//                     fontFamily:"'Cormorant Garamond',serif", fontWeight:700,
+//                     boxShadow:"0 4px 14px rgba(79,110,247,.25)" }}>
+//               {p?.name?.charAt(0)}
+//             </Avatar>
+//             <Box>
+//               <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.4rem", fontWeight:700, color:"#1a1f36" }}>
+//                 {p?.name}
+//               </Typography>
+//               <Typography sx={{ fontSize:".78rem", color:"#8892b0" }}>Patient Record</Typography>
+//             </Box>
+//           </Box>
+//           <IconButton onClick={onClose} size="small"
+//             sx={{ background:"#f5f7ff", border:"1px solid #e8ecf5", borderRadius:"9px",
+//                   "&:hover":{ background:"#eef1fe", color:"#4f6ef7" } }}>
+//             <CloseIcon sx={{ fontSize:16 }} />
+//           </IconButton>
+//         </Box>
+
+//         <Divider sx={{ mb:3, borderColor:"#e8ecf5" }} />
+
+//         {/* Patient details */}
+//         <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1rem", fontWeight:700, color:"#1a1f36", mb:2 }}>
+//           Patient Information
+//         </Typography>
+//         <Grid container spacing={2} sx={{ mb:3 }}>
+//           {[
+//             ["Full Name",    p?.name],
+//             ["Age",          p?.age ? `${p.age} years` : "—"],
+//             ["Gender",       p?.gender],
+//             ["Date of Birth",p?.dob],
+//             ["Contact",      p?.contact],
+//           ].map(([label, val]) => (
+//             <Grid item xs={6} key={label}>
+//               <div className="modal-field-label">{label}</div>
+//               <div className="modal-field-value">{val || "—"}</div>
+//             </Grid>
+//           ))}
+//         </Grid>
+
+//         <Divider sx={{ mb:3, borderColor:"#e8ecf5" }} />
+
+//         {/* Appointment details */}
+//         <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1rem", fontWeight:700, color:"#1a1f36", mb:2 }}>
+//           Appointment Details
+//         </Typography>
+//         <Grid container spacing={2} sx={{ mb:3 }}>
+//           {[
+//             ["Date",        appt.date],
+//             ["Time Slot",   appt.timeSlot],
+//             ["Status",      appt.status],
+//           ].map(([label, val]) => (
+//             <Grid item xs={6} key={label}>
+//               <div className="modal-field-label">{label}</div>
+//               <div className="modal-field-value">{val || "—"}</div>
+//             </Grid>
+//           ))}
+//           <Grid item xs={12}>
+//             <div className="modal-field-label">Description / Symptoms</div>
+//             <div className="modal-field-value">{appt.description || "—"}</div>
+//           </Grid>
+//         </Grid>
+
+//         <Divider sx={{ mb:3, borderColor:"#e8ecf5" }} />
+
+//         {/* Report */}
+//         <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1rem", fontWeight:700, color:"#1a1f36", mb:2 }}>
+//           Medical Report
+//         </Typography>
+//         {appt.report ? (
+//           <a
+//             href={`http://localhost:8080/appointments/report/${appt.report}`}
+//             target="_blank"
+//             rel="noreferrer"
+//             className="report-badge"
+//             style={{ display:"inline-flex" }}
+//           >
+//             <DescriptionIcon sx={{ fontSize:15 }} />
+//             View / Download Report
+//           </a>
+//         ) : (
+//           <span className="report-badge no-report">
+//             <DescriptionIcon sx={{ fontSize:15 }} />
+//             No report attached
+//           </span>
+//         )}
+//       </Box>
+//     </Modal>
+//   );
+// }
+
+// // ── Main Component ─────────────────────────────────────────────────────────────
+// export default function DoctorDashboard() {
+//   const { user, logout } = useContext(AuthContext);
+//   const userId = user?.id || localStorage.getItem("userId");
+//   const navigate = useNavigate();
+
+//   const [doctor,         setDoctor]         = useState(null);
+//   const [appointments,   setAppointments]   = useState([]);
+//   const [loading,        setLoading]        = useState(true);
+//   const [profileMissing, setProfileMissing] = useState(false);
+//   const [sidebarOpen,    setSidebarOpen]    = useState(false);
+//   const [view,           setView]           = useState("dashboard");
+//   const [selectedAppt,   setSelectedAppt]   = useState(null);  // for modal
+
+//   // ── UNCHANGED fetch ──
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const docRes = await axios.get(`http://localhost:8080/doctor/user/${userId}`);
+//         if (!docRes.data) { setProfileMissing(true); return; }
+//         setDoctor(docRes.data);
+//         const appRes = await axios.get(`http://localhost:8080/appointments/doctor/${docRes.data.id}`);
+//         setAppointments(appRes.data);
+//       } catch (err) {
+//         console.error(err);
+//         setProfileMissing(true);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+//     if (userId) fetchData();
+//   }, [userId]);
+
+//   // ── UNCHANGED handlers ──
+//   const acceptAppointment = async (id) => {
+//     await axios.put(`http://localhost:8080/appointments/${id}/approve`);
+//     setAppointments((prev) => prev.map((a) => (a.id === id ? { ...a, status: "APPROVED" } : a)));
+//   };
+
+//   const rejectAppointment = async (id) => {
+//     await axios.put(`http://localhost:8080/appointments/${id}/reject`);
+//     setAppointments((prev) => prev.filter((a) => a.id !== id));
+//   };
+
+//   const handleLogout = () => { 
+//     // const item=localStorage.getItem("user")
+//     // console.log(item);
+//      localStorage.removeItem("user")
+//     // logout();
+//      navigate("/"); 
+//   };
+//   const handleNavClick = (key) => { setView(key); setSidebarOpen(false); };
+
+//   if (profileMissing) {
+//     return <DoctorProfileForm userId={userId} onCreated={(doc) => { setDoctor(doc); setProfileMissing(false); }} />;
+//   }
+//   if (loading) return (
+//     <Box sx={{ display:"flex", alignItems:"center", justifyContent:"center", minHeight:"100vh", background:"#f5f7ff" }}>
+//       <CircularProgress sx={{ color:"#4f6ef7" }} />
+//     </Box>
+//   );
+
+//   const pending  = appointments.filter((a) => a.status === "PENDING");
+//   const approved = appointments.filter((a) => a.status === "APPROVED");
+
+//   // ✅ Patient count = number of unique approved patients
+//   const uniquePatientCount = new Set(approved.map((a) => a.patient?.id)).size;
+
+//   const menuItems = [
+//     { key: "dashboard",  label: "Dashboard",             icon: <DashboardIcon    sx={{ fontSize:18 }} /> },
+//     { key: "pending",    label: "Pending Requests",      icon: <EventIcon        sx={{ fontSize:18 }} /> },
+//     { key: "approved",   label: "Approved Appointments", icon: <CheckCircleIcon  sx={{ fontSize:18 }} /> },
+//     { key: "records",    label: "Patient Records",       icon: <FolderSharedIcon sx={{ fontSize:18 }} /> },
+//     { key: "profile",    label: "My Profile",            icon: <PersonIcon       sx={{ fontSize:18 }} /> },
+//   ];
+
+//   return (
+//     <Box sx={{ minHeight:"100vh", background:"#f5f7ff", fontFamily:"'Outfit',sans-serif" }}>
+//       <div className="doc-blob doc-blob-1" />
+//       <div className="doc-blob doc-blob-2" />
+
+//       {sidebarOpen && <div className="doc-overlay" onClick={() => setSidebarOpen(false)} />}
+
+//       {/* ── Sidebar ── */}
+//       <div className={`doc-sidebar ${sidebarOpen ? "open" : "closed"}`}>
+//         <div className="doc-sidebar-top">
+//           <div className="doc-logo">
+//             <div className="doc-logo-icon">✦</div>
+//             Med<span className="doc-logo-accent">Vault</span>
+//           </div>
+//           <div className="doc-close-btn" onClick={() => setSidebarOpen(false)}>
+//             <CloseIcon sx={{ fontSize:16 }} />
+//           </div>
+//         </div>
+
+//         <div className="doc-nav-label">Navigation</div>
+//         {menuItems.map((item) => (
+//           <NavItem key={item.key} icon={item.icon} label={item.label}
+//             active={view === item.key} onClick={() => handleNavClick(item.key)} />
+//         ))}
+
+//         <div className="doc-sidebar-spacer" />
+
+//         <div className="doc-user-card">
+//           <div className="doc-user-av">{doctor?.name?.charAt(0)}</div>
+//           <Box>
+//             <Typography sx={{ fontSize:".85rem", fontWeight:600, color:"#1a1f36", lineHeight:1.2 }}>Dr. {doctor?.name}</Typography>
+//             <Typography sx={{ fontSize:".72rem", color:"#8892b0" }}>{doctor?.specialization}</Typography>
+//           </Box>
+//         </div>
+
+//         <button onClick={handleLogout}
+//           style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 12px", borderRadius:11,
+//                    cursor:"pointer", fontSize:".875rem", fontWeight:500, color:"#e11d48",
+//                    border:"1px solid transparent", background:"none", width:"100%",
+//                    fontFamily:"'Outfit',sans-serif", transition:"all .18s" }}
+//           onMouseEnter={e => { e.currentTarget.style.background="#fff1f3"; e.currentTarget.style.borderColor="rgba(225,29,72,.15)"; }}
+//           onMouseLeave={e => { e.currentTarget.style.background="none";    e.currentTarget.style.borderColor="transparent"; }}>
+//           <div className="doc-nav-icon" style={{ background:"#fff1f3", color:"#e11d48" }}>
+//             <LogoutIcon sx={{ fontSize:16 }} />
+//           </div>
+//           Sign Out
+//         </button>
+//       </div>
+
+//       {/* ── Top bar ── */}
+//       <div className="doc-topbar">
+//         <div className="doc-topbar-left">
+//           <div className="doc-hamburger" onClick={() => setSidebarOpen(true)}>
+//             <MenuIcon sx={{ fontSize:20 }} />
+//           </div>
+//           <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontWeight:700, fontSize:"1.3rem", color:"#4f6ef7" }}>
+//             Med<span style={{ color:"#7c3aed" }}>Vault</span>
+//           </Typography>
+//         </div>
+//         <Button startIcon={<LogoutIcon />} onClick={handleLogout} size="small"
+//           sx={{ color:"#e11d48", borderColor:"rgba(225,29,72,.3)", textTransform:"none",
+//                 borderRadius:2, border:"1px solid", fontFamily:"'Outfit',sans-serif" }}>
+//           Logout
+//         </Button>
+//       </div>
+
+//       {/* ── Page content ── */}
+//       <Box sx={{ p:{ xs:2, md:"36px 44px" }, position:"relative", zIndex:1 }}>
+//         <AnimatePresence mode="wait">
+//           <motion.div key={view}
+//             initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }}
+//             exit={{ opacity:0, y:-20 }} transition={{ duration:0.3 }}>
+
+//             {/* ── DASHBOARD ── */}
+//             {view === "dashboard" && (
+//               <>
+//                 <Box sx={{ mb:4 }}>
+//                   <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:700, color:"#1a1f36" }}>
+//                     Welcome, Dr. {doctor?.name?.split(" ")[0]} 👨‍⚕️
+//                   </Typography>
+//                   <Typography sx={{ color:"#8892b0", fontSize:".875rem", mt:.5 }}>
+//                     Here's your practice overview for today
+//                   </Typography>
+//                 </Box>
+
+//                 <div className="doc-hero">
+//                   <Avatar className="av-blue"
+//                     sx={{ width:80, height:80, borderRadius:"22px", fontSize:"2rem",
+//                           fontFamily:"'Cormorant Garamond',serif", fontWeight:700,
+//                           boxShadow:"0 8px 24px rgba(79,110,247,.3)", flexShrink:0 }}>
+//                     {doctor?.name?.charAt(0)}
+//                   </Avatar>
+//                   <Box>
+//                     <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.8rem", fontWeight:700, color:"#1a1f36" }}>
+//                       Dr. {doctor?.name}
+//                     </Typography>
+//                     <Typography sx={{ color:"#8892b0", fontSize:".82rem", mt:.5 }}>{doctor?.specialization}</Typography>
+//                     <Box sx={{ display:"flex", gap:1, mt:1.5, flexWrap:"wrap" }}>
+//                       {[`📞 ${doctor?.contact}`, `🏥 ${doctor?.hospital}`].map((v, i) => (
+//                         <Chip key={i} label={v} size="small"
+//                           sx={{ background:"#eef1fe", color:"#4f6ef7", border:"1px solid rgba(79,110,247,.18)", fontWeight:500, fontSize:".75rem" }} />
+//                       ))}
+//                     </Box>
+//                   </Box>
+//                 </div>
+
+//                 {/* Stats — patient count = approved unique patients */}
+//                 <Grid container spacing={2.5} sx={{ mb:4 }}>
+//                   <Grid item xs={12} sm={4}>
+//                     <StatCard label="Patients" value={uniquePatientCount} icon="👥" color="#4f6ef7" />
+//                   </Grid>
+//                   <Grid item xs={12} sm={4}>
+//                     <StatCard label="Total Appointments" value={appointments.length} icon="📅" color="#7c3aed" />
+//                   </Grid>
+//                   <Grid item xs={12} sm={4}>
+//                     <StatCard label="Pending Requests" value={pending.length} icon="⏳" color="#d97706" />
+//                   </Grid>
+//                 </Grid>
+
+//                 {pending.length > 0 && (
+//                   <>
+//                     <div className="doc-sec-heading">Pending Requests</div>
+//                     <Grid container spacing={2.5}>
+//                       {pending.slice(0, 3).map((appt, i) => (
+//                         <Grid item xs={12} md={4} key={appt.id}>
+//                           <motion.div whileHover={{ scale:1.02 }}>
+//                             <Card className="doc-pending-card">
+//                               <CardContent sx={{ p:"22px !important" }}>
+//                                 <Box sx={{ display:"flex", alignItems:"center", gap:1.5, mb:1.5 }}>
+//                                   <Avatar className="av-amber" sx={{ width:44, height:44, borderRadius:"12px", fontSize:"1rem", fontWeight:700 }}>
+//                                     {appt.patient?.name?.charAt(0)}
+//                                   </Avatar>
+//                                   <Box>
+//                                     <Typography sx={{ fontWeight:600, fontSize:".92rem", color:"#1a1f36" }}>{appt.patient?.name}</Typography>
+//                                     <Typography sx={{ fontSize:".76rem", color:"#8892b0" }}>Age {appt.patient?.age}</Typography>
+//                                   </Box>
+//                                 </Box>
+//                                 <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.6 }}>🕐 {appt.timeSlot}</Typography>
+//                                 <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:1.5 }}>📝 {appt.description}</Typography>
+//                                 <Box sx={{ display:"flex", gap:1 }}>
+//                                   <Button size="small" variant="contained" onClick={() => acceptAppointment(appt.id)}
+//                                     sx={{ background:"linear-gradient(135deg,#059669,#34d399)", borderRadius:"8px",
+//                                           textTransform:"none", fontWeight:600, fontSize:".78rem" }}>
+//                                     ✓ Accept
+//                                   </Button>
+//                                   <Button size="small" variant="outlined" onClick={() => rejectAppointment(appt.id)}
+//                                     sx={{ borderColor:"rgba(225,29,72,.3)", color:"#e11d48", borderRadius:"8px",
+//                                           textTransform:"none", fontWeight:600, fontSize:".78rem",
+//                                           "&:hover":{ background:"#fff1f3" } }}>
+//                                     ✕ Reject
+//                                   </Button>
+//                                 </Box>
+//                               </CardContent>
+//                             </Card>
+//                           </motion.div>
+//                         </Grid>
+//                       ))}
+//                     </Grid>
+//                   </>
+//                 )}
+//               </>
+//             )}
+
+//             {/* ── PENDING ── */}
+//             {view === "pending" && (
+//               <>
+//                 <Box sx={{ mb:4 }}>
+//                   <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:700, color:"#1a1f36" }}>Pending Requests</Typography>
+//                   <Typography sx={{ color:"#8892b0", fontSize:".875rem", mt:.5 }}>{pending.length} request{pending.length !== 1 ? "s" : ""} awaiting your response</Typography>
+//                 </Box>
+//                 {pending.length === 0 ? (
+//                   <Box sx={{ textAlign:"center", py:8, color:"#8892b0" }}>
+//                     <Typography sx={{ fontSize:"2.5rem", mb:1 }}>🎉</Typography>
+//                     <Typography sx={{ fontWeight:500 }}>No pending requests!</Typography>
+//                   </Box>
+//                 ) : (
+//                   <Grid container spacing={2.5}>
+//                     {pending.map((appt) => (
+//                       <Grid item xs={12} md={4} key={appt.id}>
+//                         <motion.div whileHover={{ scale:1.02 }}>
+//                           <Card className="doc-pending-card">
+//                             <CardContent sx={{ p:"24px !important" }}>
+//                               <Box sx={{ display:"flex", alignItems:"center", gap:1.5, mb:2 }}>
+//                                 <Avatar className="av-amber" sx={{ width:48, height:48, borderRadius:"14px", fontSize:"1.1rem", fontWeight:700 }}>
+//                                   {appt.patient?.name?.charAt(0)}
+//                                 </Avatar>
+//                                 <Box>
+//                                   <Typography sx={{ fontWeight:600, fontSize:".95rem", color:"#1a1f36" }}>{appt.patient?.name}</Typography>
+//                                   <Typography sx={{ fontSize:".76rem", color:"#8892b0" }}>Age {appt.patient?.age}</Typography>
+//                                 </Box>
+//                                 <Chip label="Pending" size="small"
+//                                   sx={{ ml:"auto", background:"#fffbeb", color:"#d97706", border:"1px solid rgba(217,119,6,.2)", fontWeight:600, fontSize:".7rem" }} />
+//                               </Box>
+//                               <Divider sx={{ mb:1.5, borderColor:"#f0f2f8" }} />
+//                               <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.6 }}>🕐 {appt.timeSlot}</Typography>
+//                               <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.6 }}>📝 {appt.description}</Typography>
+//                               <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:2 }}>📄 {appt.report || "No report attached"}</Typography>
+//                               <Box sx={{ display:"flex", gap:1 }}>
+//                                 <Button variant="contained" onClick={() => acceptAppointment(appt.id)}
+//                                   sx={{ background:"linear-gradient(135deg,#059669,#34d399)", borderRadius:"9px",
+//                                         textTransform:"none", fontWeight:600, fontSize:".83rem",
+//                                         boxShadow:"0 3px 10px rgba(5,150,105,.25)", flex:1 }}>
+//                                   ✓ Accept
+//                                 </Button>
+//                                 <Button variant="outlined" onClick={() => rejectAppointment(appt.id)}
+//                                   sx={{ borderColor:"rgba(225,29,72,.3)", color:"#e11d48", borderRadius:"9px",
+//                                         textTransform:"none", fontWeight:600, fontSize:".83rem", flex:1,
+//                                         "&:hover":{ background:"#fff1f3", borderColor:"#e11d48" } }}>
+//                                   ✕ Reject
+//                                 </Button>
+//                               </Box>
+//                             </CardContent>
+//                           </Card>
+//                         </motion.div>
+//                       </Grid>
+//                     ))}
+//                   </Grid>
+//                 )}
+//               </>
+//             )}
+
+//             {/* ── APPROVED ── */}
+//             {view === "approved" && (
+//               <>
+//                 <Box sx={{ mb:4 }}>
+//                   <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:700, color:"#1a1f36" }}>Approved Appointments</Typography>
+//                   <Typography sx={{ color:"#8892b0", fontSize:".875rem", mt:.5 }}>{approved.length} confirmed appointment{approved.length !== 1 ? "s" : ""}</Typography>
+//                 </Box>
+//                 {approved.length === 0 ? (
+//                   <Box sx={{ textAlign:"center", py:8, color:"#8892b0" }}>
+//                     <Typography sx={{ fontSize:"2.5rem", mb:1 }}>📋</Typography>
+//                     <Typography sx={{ fontWeight:500 }}>No approved appointments yet.</Typography>
+//                   </Box>
+//                 ) : (
+//                   <Grid container spacing={2.5}>
+//                     {approved.map((appt, i) => (
+//                       <Grid item xs={12} md={4} key={appt.id}>
+//                         <motion.div whileHover={{ scale:1.02 }}>
+//                           <Card className="doc-approved-card">
+//                             <CardContent sx={{ p:"24px !important" }}>
+//                               <Box sx={{ display:"flex", alignItems:"center", gap:1.5, mb:2 }}>
+//                                 <Avatar className="av-green" sx={{ width:48, height:48, borderRadius:"14px", fontSize:"1.1rem", fontWeight:700 }}>
+//                                   {appt.patient?.name?.charAt(0)}
+//                                 </Avatar>
+//                                 <Box>
+//                                   <Typography sx={{ fontWeight:600, fontSize:".95rem", color:"#1a1f36" }}>{appt.patient?.name}</Typography>
+//                                   <Typography sx={{ fontSize:".76rem", color:"#8892b0" }}>Age {appt.patient?.age}</Typography>
+//                                 </Box>
+//                                 <Chip label="Approved" size="small"
+//                                   sx={{ ml:"auto", background:"#ecfdf5", color:"#059669", border:"1px solid rgba(5,150,105,.2)", fontWeight:600, fontSize:".7rem" }} />
+//                               </Box>
+//                               <Divider sx={{ mb:1.5, borderColor:"#f0f2f8" }} />
+//                               <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.6 }}>🎂 DOB: {appt.patient?.dob || "—"}</Typography>
+//                               <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.6 }}>🕐 {appt.timeSlot}</Typography>
+//                               <Typography sx={{ fontSize:".82rem", color:"#4a5278" }}>📝 {appt.description}</Typography>
+//                             </CardContent>
+//                           </Card>
+//                         </motion.div>
+//                       </Grid>
+//                     ))}
+//                   </Grid>
+//                 )}
+//               </>
+//             )}
+
+//             {/* ── PATIENT RECORDS ── */}
+//             {view === "records" && (
+//               <>
+//                 <Box sx={{ mb:4 }}>
+//                   <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:700, color:"#1a1f36" }}>
+//                     Patient Records
+//                   </Typography>
+//                   <Typography sx={{ color:"#8892b0", fontSize:".875rem", mt:.5 }}>
+//                     {uniquePatientCount} patient{uniquePatientCount !== 1 ? "s" : ""} · click a card to view full details & report
+//                   </Typography>
+//                 </Box>
+
+//                 {approved.length === 0 ? (
+//                   <Box sx={{ textAlign:"center", py:8, color:"#8892b0" }}>
+//                     <Typography sx={{ fontSize:"2.5rem", mb:1 }}>🗂️</Typography>
+//                     <Typography sx={{ fontWeight:500 }}>No patient records yet. Approve appointments to see records here.</Typography>
+//                   </Box>
+//                 ) : (
+//                   <Grid container spacing={2.5}>
+//                     {approved.map((appt, i) => (
+//                       <Grid item xs={12} md={4} key={appt.id}>
+//                         <motion.div whileHover={{ scale:1.02 }} onClick={() => setSelectedAppt(appt)}>
+//                           <Card className="doc-patient-card">
+//                             <CardContent sx={{ p:"24px !important" }}>
+//                               {/* Patient row */}
+//                               <Box sx={{ display:"flex", alignItems:"center", gap:1.5, mb:2 }}>
+//                                 <Avatar className={["av-blue","av-violet","av-teal","av-green"][i % 4]}
+//                                   sx={{ width:48, height:48, borderRadius:"14px", fontSize:"1.1rem", fontWeight:700 }}>
+//                                   {appt.patient?.name?.charAt(0)}
+//                                 </Avatar>
+//                                 <Box sx={{ flex:1 }}>
+//                                   <Typography sx={{ fontWeight:600, fontSize:".95rem", color:"#1a1f36" }}>{appt.patient?.name}</Typography>
+//                                   <Typography sx={{ fontSize:".76rem", color:"#8892b0" }}>
+//                                     {appt.patient?.gender} · Age {appt.patient?.age}
+//                                   </Typography>
+//                                 </Box>
+//                                 <Chip label="Approved" size="small"
+//                                   sx={{ background:"#ecfdf5", color:"#059669", border:"1px solid rgba(5,150,105,.2)", fontWeight:600, fontSize:".7rem" }} />
+//                               </Box>
+
+//                               <Divider sx={{ mb:1.5, borderColor:"#f0f2f8" }} />
+
+//                               <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.5 }}>🕐 {appt.timeSlot} &nbsp;·&nbsp; 📅 {appt.date}</Typography>
+//                               <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:1.5 }} noWrap>📝 {appt.description}</Typography>
+
+//                               {/* Report badge */}
+//                               <Box sx={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+//                                 <span className={`report-badge ${appt.report ? "" : "no-report"}`}>
+//                                   <DescriptionIcon sx={{ fontSize:14 }} />
+//                                   {appt.report ? "Report attached" : "No report"}
+//                                 </span>
+//                                 <Typography sx={{ fontSize:".76rem", color:"#4f6ef7", fontWeight:600, cursor:"pointer" }}>
+//                                   View details →
+//                                 </Typography>
+//                               </Box>
+//                             </CardContent>
+//                           </Card>
+//                         </motion.div>
+//                       </Grid>
+//                     ))}
+//                   </Grid>
+//                 )}
+//               </>
+//             )}
+
+//             {/* ── PROFILE ── */}
+//             {view === "profile" && (
+//               <>
+//                 <Box sx={{ mb:4 }}>
+//                   <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:700, color:"#1a1f36" }}>My Profile</Typography>
+//                   <Typography sx={{ color:"#8892b0", fontSize:".875rem", mt:.5 }}>Your professional details</Typography>
+//                 </Box>
+//                 <Card className="doc-card" sx={{ p:4 }}>
+//                   <Box sx={{ display:"flex", alignItems:"center", gap:2.5, mb:3 }}>
+//                     <Avatar className="av-blue"
+//                       sx={{ width:76, height:76, borderRadius:"22px", fontSize:"2rem",
+//                             fontFamily:"'Cormorant Garamond',serif", fontWeight:700,
+//                             boxShadow:"0 6px 20px rgba(79,110,247,.25)" }}>
+//                       {doctor?.name?.charAt(0)}
+//                     </Avatar>
+//                     <Box>
+//                       <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.6rem", fontWeight:700, color:"#1a1f36" }}>
+//                         Dr. {doctor?.name}
+//                       </Typography>
+//                       <Typography sx={{ fontSize:".82rem", color:"#8892b0", mt:.5 }}>Doctor Account · Active</Typography>
+//                     </Box>
+//                   </Box>
+//                   <Divider sx={{ mb:3, borderColor:"#e8ecf5" }} />
+//                   <Grid container spacing={3}>
+//                     {[
+//                       ["Full Name",      `Dr. ${doctor?.name}`],
+//                       ["Specialization", doctor?.specialization],
+//                       ["Contact",        doctor?.contact],
+//                       ["Hospital",       doctor?.hospital],
+//                       ["Doctor ID",      `#${doctor?.id}`],
+//                     ].map(([label, val]) => (
+//                       <Grid item xs={12} sm={6} key={label}>
+//                         <Typography sx={{ fontSize:".7rem", textTransform:"uppercase", letterSpacing:"1.1px", color:"#8892b0", fontWeight:600, mb:.6 }}>{label}</Typography>
+//                         <Typography sx={{ fontSize:".95rem", fontWeight:500, color:"#1a1f36" }}>{val || "—"}</Typography>
+//                       </Grid>
+//                     ))}
+//                   </Grid>
+//                 </Card>
+//               </>
+//             )}
+
+//           </motion.div>
+//         </AnimatePresence>
+//       </Box>
+
+//       {/* ── Patient detail modal ── */}
+//       <PatientModal
+//         appt={selectedAppt}
+//         open={Boolean(selectedAppt)}
+//         onClose={() => setSelectedAppt(null)}
+//       />
+//     </Box>
+//   );
+// }
+
+
+
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
@@ -222,51 +2131,491 @@ import DoctorProfileForm from "./DoctorProfileForm";
 import {
   Box,
   Typography,
-  Paper,
   CircularProgress,
-  Alert,
   Grid,
   Avatar,
   Card,
   CardContent,
+  Button,
+  Chip,
+  Divider,
+  Modal,
+  IconButton,
 } from "@mui/material";
-import { motion } from "framer-motion";
+import MenuIcon           from "@mui/icons-material/Menu";
+import CloseIcon          from "@mui/icons-material/Close";
+import LogoutIcon         from "@mui/icons-material/Logout";
+import DashboardIcon      from "@mui/icons-material/Dashboard";
+import EventIcon          from "@mui/icons-material/Event";
+import CheckCircleIcon    from "@mui/icons-material/CheckCircle";
+import PersonIcon         from "@mui/icons-material/Person";
+import FolderSharedIcon   from "@mui/icons-material/FolderShared";
+import DescriptionIcon    from "@mui/icons-material/Description";
+import OpenInNewIcon      from "@mui/icons-material/OpenInNew";
+import DownloadIcon       from "@mui/icons-material/Download";
+import VisibilityIcon     from "@mui/icons-material/Visibility";
+import VisibilityOffIcon  from "@mui/icons-material/VisibilityOff";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
+// ── BASE URL for reports ───────────────────────────────────────────────────────
+const BASE = "http://localhost:8080";
+
+// ── Styles ─────────────────────────────────────────────────────────────────────
+const globalStyles = `
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap');
+  body { font-family: 'Outfit', sans-serif !important; }
+
+  .doc-overlay {
+    position: fixed; inset: 0;
+    background: rgba(26,31,54,.18); backdrop-filter: blur(3px);
+    z-index: 199; animation: overlayIn .2s ease;
+  }
+  @keyframes overlayIn { from{opacity:0}to{opacity:1} }
+
+  .doc-sidebar {
+    width: 260px; background: #ffffff;
+    border-right: 1px solid #e8ecf5;
+    display: flex; flex-direction: column;
+    padding: 20px 14px 24px;
+    position: fixed; top: 0; left: 0;
+    height: 100vh; z-index: 200;
+    box-shadow: 4px 0 28px rgba(79,110,247,.12);
+    transition: transform .28s cubic-bezier(.22,1,.36,1);
+  }
+  .doc-sidebar.closed { transform: translateX(-100%); }
+  .doc-sidebar.open   { transform: translateX(0); }
+  .doc-sidebar-top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 6px 20px;
+  }
+  .doc-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 700; color: #4f6ef7;
+    display: flex; align-items: center; gap: 9px;
+  }
+  .doc-logo-icon {
+    width: 32px; height: 32px; border-radius: 9px;
+    background: linear-gradient(135deg, #4f6ef7, #7c3aed);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: .85rem; flex-shrink: 0;
+  }
+  .doc-logo-accent { color: #7c3aed; }
+  .doc-close-btn {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: #f5f7ff; border: 1px solid #e8ecf5;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: #8892b0; transition: all .15s;
+  }
+  .doc-close-btn:hover { background: #eef1fe; color: #4f6ef7; border-color: rgba(79,110,247,.2); }
+  .doc-nav-label {
+    font-size: .67rem; text-transform: uppercase; letter-spacing: 1.2px;
+    color: #b0b8d0; font-weight: 600; padding: 0 10px; margin: 4px 0 6px;
+  }
+  .doc-nav-item {
+    display: flex; align-items: center; gap: 11px;
+    padding: 10px 12px; border-radius: 11px; cursor: pointer;
+    font-size: .875rem; font-weight: 500; color: #4a5278;
+    transition: all .18s ease; border: 1px solid transparent;
+    margin-bottom: 3px; user-select: none;
+  }
+  .doc-nav-item:hover { background: #eef1fe; color: #4f6ef7; }
+  .doc-nav-item.active { background: #eef1fe; color: #4f6ef7; font-weight: 600; border-color: rgba(79,110,247,.18); }
+  .doc-nav-item.active .doc-nav-icon { background: #4f6ef7 !important; color: #fff !important; }
+  .doc-nav-icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: #f0f2f8; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all .18s; color: #4a5278;
+  }
+  .doc-sidebar-spacer { flex: 1; }
+  .doc-user-card {
+    display: flex; align-items: center; gap: 11px;
+    padding: 12px; border-radius: 14px;
+    background: #f5f7ff; border: 1px solid #e8ecf5; margin-bottom: 10px;
+  }
+  .doc-user-av {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, #4f6ef7, #7c3aed);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif; font-weight: 700; color: #fff; font-size: 1.1rem;
+  }
+  .doc-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 24px; background: #fff;
+    border-bottom: 1px solid #e8ecf5;
+    box-shadow: 0 1px 8px rgba(79,110,247,.07);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .doc-topbar-left { display: flex; align-items: center; gap: 14px; }
+  .doc-hamburger {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: #f5f7ff; border: 1px solid #e8ecf5;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: #4f6ef7; transition: all .18s;
+  }
+  .doc-hamburger:hover { background: #eef1fe; border-color: rgba(79,110,247,.2); }
+  .doc-blob { position: fixed; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
+  .doc-blob-1 { width:500px;height:500px;background:rgba(79,110,247,.07);top:-120px;right:-80px; }
+  .doc-blob-2 { width:400px;height:400px;background:rgba(124,58,237,.05);bottom:-80px;left:100px; }
+  .doc-hero {
+    background: linear-gradient(135deg,#fff 55%,#eef1fe 100%) !important;
+    border: 1px solid #e8ecf5 !important; border-radius: 20px !important;
+    box-shadow: 0 2px 16px rgba(79,110,247,.08) !important;
+    padding: 36px 40px !important; position: relative; overflow: hidden;
+    display: flex; align-items: center; gap: 28px; margin-bottom: 28px;
+  }
+  .doc-hero::after { content:'✦'; position:absolute; right:40px; bottom:10px; font-size:5rem; color:rgba(79,110,247,.04); line-height:1; pointer-events:none; }
+  .doc-stat {
+    background: #fff !important; border: 1px solid #e8ecf5 !important;
+    border-radius: 18px !important; box-shadow: 0 1px 6px rgba(79,110,247,.06) !important;
+    padding: 24px 28px; position: relative; overflow: hidden;
+    transition: box-shadow .2s, transform .2s !important;
+  }
+  .doc-stat:hover { box-shadow: 0 6px 24px rgba(79,110,247,.13) !important; transform: translateY(-2px); }
+  .doc-stat-value { font-family:'Cormorant Garamond',serif; font-size:2.6rem; font-weight:700; line-height:1; }
+  .doc-stat-label { font-size:.72rem; color:#8892b0; text-transform:uppercase; letter-spacing:1px; font-weight:600; margin-bottom:8px; }
+  .doc-stat-icon  { position:absolute; right:20px; top:50%; transform:translateY(-50%); font-size:2.4rem; opacity:.07; }
+  .doc-card {
+    background: #fff !important; border: 1px solid #e8ecf5 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 1px 4px rgba(79,110,247,.06), 0 2px 12px rgba(0,0,0,.04) !important;
+    transition: box-shadow .22s, border-color .22s, transform .22s !important;
+  }
+  .doc-card:hover { box-shadow: 0 4px 24px rgba(79,110,247,.12) !important; border-color: #d4daf0 !important; }
+  .doc-pending-card {
+    background: #fff !important; border: 1px solid #e8ecf5 !important;
+    border-left: 4px solid #f59e0b !important; border-radius: 18px !important;
+    box-shadow: 0 1px 6px rgba(245,158,11,.08) !important;
+    transition: box-shadow .22s, transform .22s !important;
+  }
+  .doc-pending-card:hover { box-shadow: 0 6px 24px rgba(245,158,11,.14) !important; transform: translateY(-3px); }
+  .doc-approved-card {
+    background: #fff !important; border: 1px solid #e8ecf5 !important;
+    border-left: 4px solid #059669 !important; border-radius: 18px !important;
+    box-shadow: 0 1px 6px rgba(5,150,105,.08) !important;
+    transition: box-shadow .22s, transform .22s !important;
+  }
+  .doc-approved-card:hover { box-shadow: 0 6px 24px rgba(5,150,105,.14) !important; transform: translateY(-3px); }
+  .doc-patient-card {
+    background: #fff !important; border: 1px solid #e8ecf5 !important;
+    border-left: 4px solid #4f6ef7 !important; border-radius: 18px !important;
+    box-shadow: 0 1px 6px rgba(79,110,247,.08) !important;
+    transition: box-shadow .22s, transform .22s, border-color .22s !important;
+    cursor: pointer;
+  }
+  .doc-patient-card:hover { box-shadow: 0 6px 28px rgba(79,110,247,.16) !important; transform: translateY(-3px); border-color: #c7cee8 !important; }
+
+  /* ── Report badge on cards ── */
+  .report-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; border-radius: 8px;
+    font-size: .75rem; font-weight: 500;
+    background: #eef1fe; color: #4f6ef7;
+    border: 1px solid rgba(79,110,247,.18);
+    cursor: pointer; transition: all .15s; text-decoration: none;
+  }
+  .report-badge:hover { background: #e0e8ff; }
+  .report-badge.no-report { background: #f5f7ff; color: #8892b0; border-color: #e8ecf5; cursor: default; pointer-events: none; }
+
+  /* ── Modal ── */
+  .patient-modal-box {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 92%; max-width: 600px;
+    background: #fff; border-radius: 22px;
+    border: 1px solid #e8ecf5;
+    box-shadow: 0 20px 60px rgba(79,110,247,.18);
+    padding: 36px; outline: none;
+    max-height: 90vh; overflow-y: auto;
+  }
+  .modal-field-label {
+    font-size: .68rem; text-transform: uppercase; letter-spacing: 1px;
+    color: #8892b0; font-weight: 600; margin-bottom: 5px;
+  }
+  .modal-field-value {
+    font-size: .92rem; font-weight: 500; color: #1a1f36; margin-bottom: 16px;
+  }
+
+  /* ── Report viewer inside modal ── */
+  .report-viewer-box {
+    border: 1.5px dashed #d4daf0; border-radius: 14px;
+    background: #f8f9ff; padding: 22px;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+    text-align: center;
+  }
+  .report-viewer-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: linear-gradient(135deg,#4f6ef7,#818cf8);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; box-shadow: 0 4px 14px rgba(79,110,247,.28);
+  }
+  .report-filename {
+    font-size: .82rem; font-weight: 500; color: #4a5278;
+    word-break: break-all; max-width: 100%;
+  }
+  .report-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .report-btn-primary {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 18px; border-radius: 10px; cursor: pointer;
+    font-size: .84rem; font-weight: 600; text-decoration: none;
+    background: linear-gradient(135deg,#4f6ef7,#818cf8); color: #fff;
+    border: none; box-shadow: 0 3px 12px rgba(79,110,247,.26);
+    transition: all .18s; font-family: 'Outfit', sans-serif;
+  }
+  .report-btn-primary:hover { box-shadow: 0 5px 20px rgba(79,110,247,.38); transform: translateY(-1px); }
+  .report-btn-secondary {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 18px; border-radius: 10px; cursor: pointer;
+    font-size: .84rem; font-weight: 600; text-decoration: none;
+    background: #fff; color: #4f6ef7;
+    border: 1.5px solid rgba(79,110,247,.28);
+    transition: all .18s; font-family: 'Outfit', sans-serif;
+  }
+  .report-btn-secondary:hover { background: #eef1fe; border-color: #4f6ef7; }
+  .report-preview-wrap {
+    width: 100%; border-radius: 12px; overflow: hidden;
+    border: 1px solid #e8ecf5; margin-top: 4px;
+    animation: fadeUp .3s ease both;
+  }
+  .report-preview-wrap iframe { width: 100%; height: 400px; border: none; display: block; }
+  .report-preview-wrap img   { width: 100%; display: block; max-height: 440px; object-fit: contain; background: #f0f2f8; }
+  .no-report-box {
+    border: 1.5px dashed #e8ecf5; border-radius: 14px;
+    padding: 20px; background: #f5f7ff;
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .doc-sec-heading {
+    font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:700; color:#1a1f36;
+    display:flex; align-items:center; gap:12px; margin-bottom:16px;
+  }
+  .doc-sec-heading::after { content:''; flex:1; height:1px; background:#e8ecf5; }
+
+  .av-blue   { background: linear-gradient(135deg,#4f6ef7,#818cf8) !important; }
+  .av-violet { background: linear-gradient(135deg,#7c3aed,#a78bfa) !important; }
+  .av-teal   { background: linear-gradient(135deg,#0891b2,#22d3ee) !important; }
+  .av-amber  { background: linear-gradient(135deg,#d97706,#fbbf24) !important; }
+  .av-green  { background: linear-gradient(135deg,#059669,#34d399) !important; }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);} }
+  .fu { animation: fadeUp .4s cubic-bezier(.22,1,.36,1) both; }
+`;
+
+if (!document.getElementById("doctor-portal-styles")) {
+  const s = document.createElement("style");
+  s.id = "doctor-portal-styles";
+  s.textContent = globalStyles;
+  document.head.appendChild(s);
+}
+
+// ── Nav item ───────────────────────────────────────────────────────────────────
+function NavItem({ icon, label, active, onClick }) {
+  return (
+    <div className={`doc-nav-item ${active ? "active" : ""}`} onClick={onClick}>
+      <div className="doc-nav-icon">{icon}</div>
+      {label}
+    </div>
+  );
+}
+
+// ── Stat card ──────────────────────────────────────────────────────────────────
+function StatCard({ label, value, icon, color }) {
+  return (
+    <div className="doc-stat fu">
+      <div className="doc-stat-label">{label}</div>
+      <div className="doc-stat-value" style={{ color }}>{value}</div>
+      <div className="doc-stat-icon">{icon}</div>
+    </div>
+  );
+}
+
+// ── Report Viewer ─────────────────────────────────────────────────────────────
+// Shows file info + Preview / Open in Tab / Download buttons
+// For PDF and images it can render an inline preview
+function ReportViewer({ filename }) {
+  const [showPreview, setShowPreview] = useState(false);
+
+  if (!filename) {
+    return (
+      <div className="no-report-box">
+        <DescriptionIcon sx={{ fontSize: 30, color: "#c0c8e0", flexShrink: 0 }} />
+        <Box>
+          <Typography sx={{ fontWeight: 600, fontSize: ".88rem", color: "#4a5278" }}>
+            No report attached
+          </Typography>
+          <Typography sx={{ fontSize: ".76rem", color: "#b0b8d0", mt: .4 }}>
+            The patient did not upload a report for this appointment.
+          </Typography>
+        </Box>
+      </div>
+    );
+  }
+
+  const reportUrl = `${BASE}/appointments/report/${filename}`;
+  const lower     = filename.toLowerCase();
+  const isPdf     = lower.endsWith(".pdf");
+  const isImage   = lower.endsWith(".png") || lower.endsWith(".jpg") || lower.endsWith(".jpeg") || lower.endsWith(".webp");
+  const canPreview = isPdf || isImage;
+
+  return (
+    <div className="report-viewer-box">
+      {/* Icon + filename */}
+      <div className="report-viewer-icon">
+        <DescriptionIcon sx={{ fontSize: 26 }} />
+      </div>
+      <div className="report-filename">{filename}</div>
+
+      {/* Action buttons */}
+      <div className="report-actions">
+        {/* Inline preview toggle (only for PDF / images) */}
+        {canPreview && (
+          <button
+            className="report-btn-primary"
+            onClick={() => setShowPreview((p) => !p)}
+          >
+            {showPreview
+              ? <><VisibilityOffIcon sx={{ fontSize: 16 }} /> Hide Preview</>
+              : <><VisibilityIcon    sx={{ fontSize: 16 }} /> Preview</>
+            }
+          </button>
+        )}
+
+        {/* Open in new browser tab */}
+        <a href={reportUrl} target="_blank" rel="noreferrer" className="report-btn-primary">
+          <OpenInNewIcon sx={{ fontSize: 16 }} />
+          Open in Tab
+        </a>
+
+        {/* Download */}
+        <a href={reportUrl} download={filename} className="report-btn-secondary">
+          <DownloadIcon sx={{ fontSize: 16 }} />
+          Download
+        </a>
+      </div>
+
+      {/* Inline preview panel */}
+      {showPreview && (
+        <div className="report-preview-wrap" style={{ width: "100%" }}>
+          {isPdf   && <iframe src={reportUrl} title="Report PDF"   />}
+          {isImage && <img    src={reportUrl} alt="Patient Report" />}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Patient Detail Modal ───────────────────────────────────────────────────────
+function PatientModal({ appt, open, onClose }) {
+  if (!appt) return null;
+  const p = appt.patient;
+
+  return (
+    <Modal open={open} onClose={onClose}>
+      <Box className="patient-modal-box">
+
+        {/* Header */}
+        <Box sx={{ display:"flex", alignItems:"center", justifyContent:"space-between", mb:3 }}>
+          <Box sx={{ display:"flex", alignItems:"center", gap:2 }}>
+            <Avatar className="av-blue"
+              sx={{ width:54, height:54, borderRadius:"16px", fontSize:"1.4rem",
+                    fontFamily:"'Cormorant Garamond',serif", fontWeight:700,
+                    boxShadow:"0 4px 14px rgba(79,110,247,.25)" }}>
+              {p?.name?.charAt(0)}
+            </Avatar>
+            <Box>
+              <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.4rem", fontWeight:700, color:"#1a1f36" }}>
+                {p?.name}
+              </Typography>
+              <Typography sx={{ fontSize:".78rem", color:"#8892b0" }}>Patient Record</Typography>
+            </Box>
+          </Box>
+          <IconButton onClick={onClose} size="small"
+            sx={{ background:"#f5f7ff", border:"1px solid #e8ecf5", borderRadius:"9px",
+                  "&:hover":{ background:"#eef1fe", color:"#4f6ef7" } }}>
+            <CloseIcon sx={{ fontSize:16 }} />
+          </IconButton>
+        </Box>
+
+        <Divider sx={{ mb:3, borderColor:"#e8ecf5" }} />
+
+        {/* Patient info */}
+        <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.05rem", fontWeight:700, color:"#1a1f36", mb:2 }}>
+          Patient Information
+        </Typography>
+        <Grid container spacing={2} sx={{ mb:3 }}>
+          {[
+            ["Full Name",     p?.name],
+            ["Age",           p?.age ? `${p.age} years` : "—"],
+            ["Gender",        p?.gender],
+            ["Date of Birth", p?.dob],
+            ["Contact",       p?.contact],
+          ].map(([label, val]) => (
+            <Grid item xs={6} key={label}>
+              <div className="modal-field-label">{label}</div>
+              <div className="modal-field-value">{val || "—"}</div>
+            </Grid>
+          ))}
+        </Grid>
+
+        <Divider sx={{ mb:3, borderColor:"#e8ecf5" }} />
+
+        {/* Appointment details */}
+        <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.05rem", fontWeight:700, color:"#1a1f36", mb:2 }}>
+          Appointment Details
+        </Typography>
+        <Grid container spacing={2} sx={{ mb:3 }}>
+          {[
+            ["Date",      appt.date],
+            ["Time Slot", appt.timeSlot],
+            ["Status",    appt.status],
+          ].map(([label, val]) => (
+            <Grid item xs={6} key={label}>
+              <div className="modal-field-label">{label}</div>
+              <div className="modal-field-value">{val || "—"}</div>
+            </Grid>
+          ))}
+          <Grid item xs={12}>
+            <div className="modal-field-label">Description / Symptoms</div>
+            <div className="modal-field-value">{appt.description || "—"}</div>
+          </Grid>
+        </Grid>
+
+        <Divider sx={{ mb:3, borderColor:"#e8ecf5" }} />
+
+        {/* ✅ Medical Report — full viewer with preview + download */}
+        <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.05rem", fontWeight:700, color:"#1a1f36", mb:2 }}>
+          Medical Report
+        </Typography>
+
+        {/* appt.report is the filename returned by @JsonProperty("report") in Appointment.java */}
+        <ReportViewer filename={appt.report} />
+
+      </Box>
+    </Modal>
+  );
+}
+
+// ── Main Component ─────────────────────────────────────────────────────────────
 export default function DoctorDashboard() {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const userId = user?.id || localStorage.getItem("userId");
+  const navigate = useNavigate();
 
-  const [doctor, setDoctor] = useState(null);
-  const [patients, setPatients] = useState([]);
-  const [appointments, setAppointments] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [doctor,         setDoctor]         = useState(null);
+  const [appointments,   setAppointments]   = useState([]);
+  const [loading,        setLoading]        = useState(true);
   const [profileMissing, setProfileMissing] = useState(false);
-  const [error, setError] = useState("");
+  const [sidebarOpen,    setSidebarOpen]    = useState(false);
+  const [view,           setView]           = useState("dashboard");
+  const [selectedAppt,   setSelectedAppt]   = useState(null);  // controls modal
 
-  // 🔹 Fetch doctor
+  // ── UNCHANGED fetch ──
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const docRes = await axios.get(
-          `http://localhost:8080/doctor/user/${userId}`
-        );
-
-        if (!docRes.data) {
-          setProfileMissing(true);
-          return;
-        }
-
-        const doctorData = docRes.data;
-        setDoctor(doctorData);
-
-        const patRes = await axios.get(
-          `http://localhost:8080/doctor/${doctorData.id}/patients`
-        );
-        setPatients(patRes.data);
-
-        const appRes = await axios.get(
-          `http://localhost:8080/appointments/doctor/${doctorData.id}`
-        );
+        const docRes = await axios.get(`${BASE}/doctor/user/${userId}`);
+        if (!docRes.data) { setProfileMissing(true); return; }
+        setDoctor(docRes.data);
+        const appRes = await axios.get(`${BASE}/appointments/doctor/${docRes.data.id}`);
         setAppointments(appRes.data);
       } catch (err) {
         console.error(err);
@@ -275,127 +2624,461 @@ export default function DoctorDashboard() {
         setLoading(false);
       }
     };
-
     if (userId) fetchData();
   }, [userId]);
 
-  // 🔹 Show profile form
+  // ── UNCHANGED handlers ──
+  const acceptAppointment = async (id) => {
+    await axios.put(`${BASE}/appointments/${id}/approve`);
+    setAppointments((prev) => prev.map((a) => (a.id === id ? { ...a, status: "APPROVED" } : a)));
+  };
+
+  const rejectAppointment = async (id) => {
+    await axios.put(`${BASE}/appointments/${id}/reject`);
+    setAppointments((prev) => prev.filter((a) => a.id !== id));
+  };
+
+  // ── UNCHANGED logout (preserving your exact version) ──
+  const handleLogout = () => {
+    // const item = localStorage.getItem("user");
+    // console.log(item);
+    localStorage.removeItem("user");
+    // logout();
+    navigate("/");
+  };
+
+  const handleNavClick = (key) => { setView(key); setSidebarOpen(false); };
+
   if (profileMissing) {
-    return (
-      <DoctorProfileForm
-        userId={userId}
-        onCreated={(doc) => {
-          setDoctor(doc);
-          setProfileMissing(false);
-        }}
-      />
-    );
+    return <DoctorProfileForm userId={userId} onCreated={(doc) => { setDoctor(doc); setProfileMissing(false); }} />;
   }
+  if (loading) return (
+    <Box sx={{ display:"flex", alignItems:"center", justifyContent:"center", minHeight:"100vh", background:"#f5f7ff" }}>
+      <CircularProgress sx={{ color:"#4f6ef7" }} />
+    </Box>
+  );
 
-  if (loading)
-    return (
-      <Box sx={{ textAlign: "center", mt: 10 }}>
-        <CircularProgress size={60} />
-      </Box>
-    );
+  const pending  = appointments.filter((a) => a.status === "PENDING");
+  const approved = appointments.filter((a) => a.status === "APPROVED");
+  const uniquePatientCount = new Set(approved.map((a) => a.patient?.id)).size;
 
-  if (error)
-    return (
-      <Box sx={{ textAlign: "center", mt: 10 }}>
-        <Alert severity="error">{error}</Alert>
-      </Box>
-    );
+  const menuItems = [
+    { key: "dashboard",  label: "Dashboard",             icon: <DashboardIcon    sx={{ fontSize:18 }} /> },
+    { key: "pending",    label: "Pending Requests",      icon: <EventIcon        sx={{ fontSize:18 }} /> },
+    { key: "approved",   label: "Approved Appointments", icon: <CheckCircleIcon  sx={{ fontSize:18 }} /> },
+    { key: "records",    label: "Patient Records",       icon: <FolderSharedIcon sx={{ fontSize:18 }} /> },
+    { key: "profile",    label: "My Profile",            icon: <PersonIcon       sx={{ fontSize:18 }} /> },
+  ];
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        background: "radial-gradient(circle at top, #021024, #020617 60%)",
-        color: "#fff",
-        p: 4,
-      }}
-    >
-      {/* 👨‍⚕️ Doctor Profile */}
-      <motion.div initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }}>
-        <Paper
-          sx={{
-            p: 5,
-            mb: 5,
-            textAlign: "center",
-            borderRadius: 4,
-            backdropFilter: "blur(20px)",
-            background:
-              "linear-gradient(145deg, rgba(0,191,255,0.2), rgba(255,255,255,0.05))",
-            boxShadow: "0 0 50px rgba(0,191,255,0.35)",
-          }}
-        >
-          <Avatar
-            sx={{
-              width: 120,
-              height: 120,
-              margin: "auto",
-              mb: 2,
-              bgcolor: "#00e5ff",
-              fontSize: 40,
-              boxShadow: "0 0 30px rgba(0,229,255,0.8)",
-            }}
-          >
-            {doctor?.name?.charAt(0)}
-          </Avatar>
+    <Box sx={{ minHeight:"100vh", background:"#f5f7ff", fontFamily:"'Outfit',sans-serif" }}>
+      <div className="doc-blob doc-blob-1" />
+      <div className="doc-blob doc-blob-2" />
 
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: "bold",
-              color: "#ffffff",
-              textShadow: "0 0 10px rgba(0,229,255,0.9)",
-            }}
-          >
-            Dr. {doctor?.name}
-          </Typography>
+      {sidebarOpen && <div className="doc-overlay" onClick={() => setSidebarOpen(false)} />}
 
-          <Typography sx={{ color: "#e0f7ff", mt: 1 }}>
-            {doctor?.specialization}
-          </Typography>
-          <Typography sx={{ color: "#e0f7ff" }}>📞 {doctor?.contact}</Typography>
-          <Typography sx={{ color: "#e0f7ff" }}>🏥 {doctor?.hospital}</Typography>
-        </Paper>
-      </motion.div>
+      {/* ── Sidebar ── */}
+      <div className={`doc-sidebar ${sidebarOpen ? "open" : "closed"}`}>
+        <div className="doc-sidebar-top">
+          <div className="doc-logo">
+            <div className="doc-logo-icon">✦</div>
+            Med<span className="doc-logo-accent">Vault</span>
+          </div>
+          <div className="doc-close-btn" onClick={() => setSidebarOpen(false)}>
+            <CloseIcon sx={{ fontSize:16 }} />
+          </div>
+        </div>
 
-      {/* 📊 Stats */}
-      <Grid container spacing={3}>
-        {[
-          { title: "Patients", value: patients.length },
-          { title: "Appointments", value: appointments.length },
-          { title: "Access Requests", value: 0 },
-        ].map((card, i) => (
-          <Grid item xs={12} md={4} key={i}>
-            <Card sx={{ textAlign: "center", p: 3, borderRadius: 3 }}>
-              <Typography variant="h6">{card.title}</Typography>
-              <Typography variant="h3">{card.value}</Typography>
-            </Card>
-          </Grid>
+        <div className="doc-nav-label">Navigation</div>
+        {menuItems.map((item) => (
+          <NavItem key={item.key} icon={item.icon} label={item.label}
+            active={view === item.key} onClick={() => handleNavClick(item.key)} />
         ))}
-      </Grid>
 
-      {/* 👥 Patients */}
-      <Typography variant="h5" sx={{ mt: 5, mb: 2 }}>
-        Assigned Patients
-      </Typography>
+        <div className="doc-sidebar-spacer" />
 
-      <Grid container spacing={2}>
-        {patients.map((p) => (
-          <Grid item xs={12} md={4} key={p.id}>
-            <Card sx={{ textAlign: "center", p: 2 }}>
-              <Avatar sx={{ margin: "auto", bgcolor: "#00bcd4" }}>
-                {p.name?.charAt(0)}
-              </Avatar>
-              <Typography>{p.name}</Typography>
-              <Typography>ID: {p.id}</Typography>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+        <div className="doc-user-card">
+          <div className="doc-user-av">{doctor?.name?.charAt(0)}</div>
+          <Box>
+            <Typography sx={{ fontSize:".85rem", fontWeight:600, color:"#1a1f36", lineHeight:1.2 }}>Dr. {doctor?.name}</Typography>
+            <Typography sx={{ fontSize:".72rem", color:"#8892b0" }}>{doctor?.specialization}</Typography>
+          </Box>
+        </div>
+
+        <button onClick={handleLogout}
+          style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 12px", borderRadius:11,
+                   cursor:"pointer", fontSize:".875rem", fontWeight:500, color:"#e11d48",
+                   border:"1px solid transparent", background:"none", width:"100%",
+                   fontFamily:"'Outfit',sans-serif", transition:"all .18s" }}
+          onMouseEnter={e => { e.currentTarget.style.background="#fff1f3"; e.currentTarget.style.borderColor="rgba(225,29,72,.15)"; }}
+          onMouseLeave={e => { e.currentTarget.style.background="none";    e.currentTarget.style.borderColor="transparent"; }}>
+          <div className="doc-nav-icon" style={{ background:"#fff1f3", color:"#e11d48" }}>
+            <LogoutIcon sx={{ fontSize:16 }} />
+          </div>
+          Sign Out
+        </button>
+      </div>
+
+      {/* ── Top bar ── */}
+      <div className="doc-topbar">
+        <div className="doc-topbar-left">
+          <div className="doc-hamburger" onClick={() => setSidebarOpen(true)}>
+            <MenuIcon sx={{ fontSize:20 }} />
+          </div>
+          <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontWeight:700, fontSize:"1.3rem", color:"#4f6ef7" }}>
+            Med<span style={{ color:"#7c3aed" }}>Vault</span>
+          </Typography>
+        </div>
+        <Button startIcon={<LogoutIcon />} onClick={handleLogout} size="small"
+          sx={{ color:"#e11d48", borderColor:"rgba(225,29,72,.3)", textTransform:"none",
+                borderRadius:2, border:"1px solid", fontFamily:"'Outfit',sans-serif" }}>
+          Logout
+        </Button>
+      </div>
+
+      {/* ── Page content ── */}
+      <Box sx={{ p:{ xs:2, md:"36px 44px" }, position:"relative", zIndex:1 }}>
+        <AnimatePresence mode="wait">
+          <motion.div key={view}
+            initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }}
+            exit={{ opacity:0, y:-20 }} transition={{ duration:0.3 }}>
+
+            {/* ──────────────────── DASHBOARD ──────────────────── */}
+            {view === "dashboard" && (
+              <>
+                <Box sx={{ mb:4 }}>
+                  <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:700, color:"#1a1f36" }}>
+                    Welcome, Dr. {doctor?.name?.split(" ")[0]} 👨‍⚕️
+                  </Typography>
+                  <Typography sx={{ color:"#8892b0", fontSize:".875rem", mt:.5 }}>
+                    Here's your practice overview for today
+                  </Typography>
+                </Box>
+
+                <div className="doc-hero">
+                  <Avatar className="av-blue"
+                    sx={{ width:80, height:80, borderRadius:"22px", fontSize:"2rem",
+                          fontFamily:"'Cormorant Garamond',serif", fontWeight:700,
+                          boxShadow:"0 8px 24px rgba(79,110,247,.3)", flexShrink:0 }}>
+                    {doctor?.name?.charAt(0)}
+                  </Avatar>
+                  <Box>
+                    <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.8rem", fontWeight:700, color:"#1a1f36" }}>
+                      Dr. {doctor?.name}
+                    </Typography>
+                    <Typography sx={{ color:"#8892b0", fontSize:".82rem", mt:.5 }}>{doctor?.specialization}</Typography>
+                    <Box sx={{ display:"flex", gap:1, mt:1.5, flexWrap:"wrap" }}>
+                      {[`📞 ${doctor?.contact}`, `🏥 ${doctor?.hospital}`].map((v, i) => (
+                        <Chip key={i} label={v} size="small"
+                          sx={{ background:"#eef1fe", color:"#4f6ef7", border:"1px solid rgba(79,110,247,.18)", fontWeight:500, fontSize:".75rem" }} />
+                      ))}
+                    </Box>
+                  </Box>
+                </div>
+
+                <Grid container spacing={2.5} sx={{ mb:4 }}>
+                  <Grid item xs={12} sm={4}><StatCard label="Patients"           value={uniquePatientCount}   icon="👥" color="#4f6ef7" /></Grid>
+                  <Grid item xs={12} sm={4}><StatCard label="Total Appointments" value={appointments.length} icon="📅" color="#7c3aed" /></Grid>
+                  <Grid item xs={12} sm={4}><StatCard label="Pending Requests"   value={pending.length}       icon="⏳" color="#d97706" /></Grid>
+                </Grid>
+
+                {pending.length > 0 && (
+                  <>
+                    <div className="doc-sec-heading">Pending Requests</div>
+                    <Grid container spacing={2.5}>
+                      {pending.slice(0, 3).map((appt) => (
+                        <Grid item xs={12} md={4} key={appt.id}>
+                          <motion.div whileHover={{ scale:1.02 }}>
+                            <Card className="doc-pending-card">
+                              <CardContent sx={{ p:"22px !important" }}>
+                                <Box sx={{ display:"flex", alignItems:"center", gap:1.5, mb:1.5 }}>
+                                  <Avatar className="av-amber" sx={{ width:44, height:44, borderRadius:"12px", fontSize:"1rem", fontWeight:700 }}>
+                                    {appt.patient?.name?.charAt(0)}
+                                  </Avatar>
+                                  <Box>
+                                    <Typography sx={{ fontWeight:600, fontSize:".92rem", color:"#1a1f36" }}>{appt.patient?.name}</Typography>
+                                    <Typography sx={{ fontSize:".76rem", color:"#8892b0" }}>Age {appt.patient?.age}</Typography>
+                                  </Box>
+                                </Box>
+                                <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.6 }}>🕐 {appt.timeSlot}</Typography>
+                                <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:1.5 }}>📝 {appt.description}</Typography>
+
+                                {/* ✅ Report badge — click to open modal */}
+                                {appt.report && (
+                                  <Box sx={{ mb:1.5 }}>
+                                    <span className="report-badge" onClick={() => setSelectedAppt(appt)}>
+                                      <DescriptionIcon sx={{ fontSize:13 }} />
+                                      View Report
+                                    </span>
+                                  </Box>
+                                )}
+
+                                <Box sx={{ display:"flex", gap:1 }}>
+                                  <Button size="small" variant="contained" onClick={() => acceptAppointment(appt.id)}
+                                    sx={{ background:"linear-gradient(135deg,#059669,#34d399)", borderRadius:"8px",
+                                          textTransform:"none", fontWeight:600, fontSize:".78rem" }}>
+                                    ✓ Accept
+                                  </Button>
+                                  <Button size="small" variant="outlined" onClick={() => rejectAppointment(appt.id)}
+                                    sx={{ borderColor:"rgba(225,29,72,.3)", color:"#e11d48", borderRadius:"8px",
+                                          textTransform:"none", fontWeight:600, fontSize:".78rem",
+                                          "&:hover":{ background:"#fff1f3" } }}>
+                                    ✕ Reject
+                                  </Button>
+                                </Box>
+                              </CardContent>
+                            </Card>
+                          </motion.div>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </>
+                )}
+              </>
+            )}
+
+            {/* ──────────────────── PENDING ──────────────────── */}
+            {view === "pending" && (
+              <>
+                <Box sx={{ mb:4 }}>
+                  <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:700, color:"#1a1f36" }}>Pending Requests</Typography>
+                  <Typography sx={{ color:"#8892b0", fontSize:".875rem", mt:.5 }}>{pending.length} request{pending.length !== 1 ? "s" : ""} awaiting your response</Typography>
+                </Box>
+                {pending.length === 0 ? (
+                  <Box sx={{ textAlign:"center", py:8, color:"#8892b0" }}>
+                    <Typography sx={{ fontSize:"2.5rem", mb:1 }}>🎉</Typography>
+                    <Typography sx={{ fontWeight:500 }}>No pending requests!</Typography>
+                  </Box>
+                ) : (
+                  <Grid container spacing={2.5}>
+                    {pending.map((appt) => (
+                      <Grid item xs={12} md={4} key={appt.id}>
+                        <motion.div whileHover={{ scale:1.02 }}>
+                          <Card className="doc-pending-card">
+                            <CardContent sx={{ p:"24px !important" }}>
+                              <Box sx={{ display:"flex", alignItems:"center", gap:1.5, mb:2 }}>
+                                <Avatar className="av-amber" sx={{ width:48, height:48, borderRadius:"14px", fontSize:"1.1rem", fontWeight:700 }}>
+                                  {appt.patient?.name?.charAt(0)}
+                                </Avatar>
+                                <Box>
+                                  <Typography sx={{ fontWeight:600, fontSize:".95rem", color:"#1a1f36" }}>{appt.patient?.name}</Typography>
+                                  <Typography sx={{ fontSize:".76rem", color:"#8892b0" }}>Age {appt.patient?.age}</Typography>
+                                </Box>
+                                <Chip label="Pending" size="small"
+                                  sx={{ ml:"auto", background:"#fffbeb", color:"#d97706", border:"1px solid rgba(217,119,6,.2)", fontWeight:600, fontSize:".7rem" }} />
+                              </Box>
+                              <Divider sx={{ mb:1.5, borderColor:"#f0f2f8" }} />
+                              <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.6 }}>🕐 {appt.timeSlot}</Typography>
+                              <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.6 }}>📝 {appt.description}</Typography>
+
+                              {/* ✅ Report badge */}
+                              <Box sx={{ mb:2 }}>
+                                {appt.report ? (
+                                  <span className="report-badge" onClick={() => setSelectedAppt(appt)}>
+                                    <DescriptionIcon sx={{ fontSize:13 }} />
+                                    View Patient Report
+                                  </span>
+                                ) : (
+                                  <span className="report-badge no-report">
+                                    <DescriptionIcon sx={{ fontSize:13 }} />
+                                    No report uploaded
+                                  </span>
+                                )}
+                              </Box>
+
+                              <Box sx={{ display:"flex", gap:1 }}>
+                                <Button variant="contained" onClick={() => acceptAppointment(appt.id)}
+                                  sx={{ background:"linear-gradient(135deg,#059669,#34d399)", borderRadius:"9px",
+                                        textTransform:"none", fontWeight:600, fontSize:".83rem",
+                                        boxShadow:"0 3px 10px rgba(5,150,105,.25)", flex:1 }}>
+                                  ✓ Accept
+                                </Button>
+                                <Button variant="outlined" onClick={() => rejectAppointment(appt.id)}
+                                  sx={{ borderColor:"rgba(225,29,72,.3)", color:"#e11d48", borderRadius:"9px",
+                                        textTransform:"none", fontWeight:600, fontSize:".83rem", flex:1,
+                                        "&:hover":{ background:"#fff1f3", borderColor:"#e11d48" } }}>
+                                  ✕ Reject
+                                </Button>
+                              </Box>
+                            </CardContent>
+                          </Card>
+                        </motion.div>
+                      </Grid>
+                    ))}
+                  </Grid>
+                )}
+              </>
+            )}
+
+            {/* ──────────────────── APPROVED ──────────────────── */}
+            {view === "approved" && (
+              <>
+                <Box sx={{ mb:4 }}>
+                  <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:700, color:"#1a1f36" }}>Approved Appointments</Typography>
+                  <Typography sx={{ color:"#8892b0", fontSize:".875rem", mt:.5 }}>{approved.length} confirmed appointment{approved.length !== 1 ? "s" : ""}</Typography>
+                </Box>
+                {approved.length === 0 ? (
+                  <Box sx={{ textAlign:"center", py:8, color:"#8892b0" }}>
+                    <Typography sx={{ fontSize:"2.5rem", mb:1 }}>📋</Typography>
+                    <Typography sx={{ fontWeight:500 }}>No approved appointments yet.</Typography>
+                  </Box>
+                ) : (
+                  <Grid container spacing={2.5}>
+                    {approved.map((appt) => (
+                      <Grid item xs={12} md={4} key={appt.id}>
+                        <motion.div whileHover={{ scale:1.02 }}>
+                          <Card className="doc-approved-card">
+                            <CardContent sx={{ p:"24px !important" }}>
+                              <Box sx={{ display:"flex", alignItems:"center", gap:1.5, mb:2 }}>
+                                <Avatar className="av-green" sx={{ width:48, height:48, borderRadius:"14px", fontSize:"1.1rem", fontWeight:700 }}>
+                                  {appt.patient?.name?.charAt(0)}
+                                </Avatar>
+                                <Box>
+                                  <Typography sx={{ fontWeight:600, fontSize:".95rem", color:"#1a1f36" }}>{appt.patient?.name}</Typography>
+                                  <Typography sx={{ fontSize:".76rem", color:"#8892b0" }}>Age {appt.patient?.age}</Typography>
+                                </Box>
+                                <Chip label="Approved" size="small"
+                                  sx={{ ml:"auto", background:"#ecfdf5", color:"#059669", border:"1px solid rgba(5,150,105,.2)", fontWeight:600, fontSize:".7rem" }} />
+                              </Box>
+                              <Divider sx={{ mb:1.5, borderColor:"#f0f2f8" }} />
+                              <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.6 }}>🎂 DOB: {appt.patient?.dob || "—"}</Typography>
+                              <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.6 }}>🕐 {appt.timeSlot}</Typography>
+                              <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:1.5 }}>📝 {appt.description}</Typography>
+
+                              {/* ✅ Report badge */}
+                              {appt.report ? (
+                                <span className="report-badge" onClick={() => setSelectedAppt(appt)}>
+                                  <DescriptionIcon sx={{ fontSize:13 }} />
+                                  View Patient Report
+                                </span>
+                              ) : (
+                                <span className="report-badge no-report">
+                                  <DescriptionIcon sx={{ fontSize:13 }} />
+                                  No report uploaded
+                                </span>
+                              )}
+                            </CardContent>
+                          </Card>
+                        </motion.div>
+                      </Grid>
+                    ))}
+                  </Grid>
+                )}
+              </>
+            )}
+
+            {/* ──────────────────── PATIENT RECORDS ──────────────────── */}
+            {view === "records" && (
+              <>
+                <Box sx={{ mb:4 }}>
+                  <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:700, color:"#1a1f36" }}>
+                    Patient Records
+                  </Typography>
+                  <Typography sx={{ color:"#8892b0", fontSize:".875rem", mt:.5 }}>
+                    {uniquePatientCount} patient{uniquePatientCount !== 1 ? "s" : ""} · click any card to view full details & report
+                  </Typography>
+                </Box>
+
+                {approved.length === 0 ? (
+                  <Box sx={{ textAlign:"center", py:8, color:"#8892b0" }}>
+                    <Typography sx={{ fontSize:"2.5rem", mb:1 }}>🗂️</Typography>
+                    <Typography sx={{ fontWeight:500 }}>No patient records yet. Approve appointments to see records here.</Typography>
+                  </Box>
+                ) : (
+                  <Grid container spacing={2.5}>
+                    {approved.map((appt, i) => (
+                      <Grid item xs={12} md={4} key={appt.id}>
+                        <motion.div whileHover={{ scale:1.02 }} onClick={() => setSelectedAppt(appt)}>
+                          <Card className="doc-patient-card">
+                            <CardContent sx={{ p:"24px !important" }}>
+                              <Box sx={{ display:"flex", alignItems:"center", gap:1.5, mb:2 }}>
+                                <Avatar className={["av-blue","av-violet","av-teal","av-green"][i % 4]}
+                                  sx={{ width:48, height:48, borderRadius:"14px", fontSize:"1.1rem", fontWeight:700 }}>
+                                  {appt.patient?.name?.charAt(0)}
+                                </Avatar>
+                                <Box sx={{ flex:1 }}>
+                                  <Typography sx={{ fontWeight:600, fontSize:".95rem", color:"#1a1f36" }}>{appt.patient?.name}</Typography>
+                                  <Typography sx={{ fontSize:".76rem", color:"#8892b0" }}>
+                                    {appt.patient?.gender} · Age {appt.patient?.age}
+                                  </Typography>
+                                </Box>
+                                <Chip label="Approved" size="small"
+                                  sx={{ background:"#ecfdf5", color:"#059669", border:"1px solid rgba(5,150,105,.2)", fontWeight:600, fontSize:".7rem" }} />
+                              </Box>
+                              <Divider sx={{ mb:1.5, borderColor:"#f0f2f8" }} />
+                              <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:.5 }}>🕐 {appt.timeSlot} &nbsp;·&nbsp; 📅 {appt.date}</Typography>
+                              <Typography sx={{ fontSize:".82rem", color:"#4a5278", mb:1.5 }} noWrap>📝 {appt.description}</Typography>
+                              <Box sx={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+                                <span className={`report-badge ${appt.report ? "" : "no-report"}`}
+                                  onClick={(e) => { if (appt.report) { e.stopPropagation(); setSelectedAppt(appt); } }}>
+                                  <DescriptionIcon sx={{ fontSize:13 }} />
+                                  {appt.report ? "Report attached" : "No report"}
+                                </span>
+                                <Typography sx={{ fontSize:".76rem", color:"#4f6ef7", fontWeight:600 }}>
+                                  View details →
+                                </Typography>
+                              </Box>
+                            </CardContent>
+                          </Card>
+                        </motion.div>
+                      </Grid>
+                    ))}
+                  </Grid>
+                )}
+              </>
+            )}
+
+            {/* ──────────────────── PROFILE ──────────────────── */}
+            {view === "profile" && (
+              <>
+                <Box sx={{ mb:4 }}>
+                  <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:700, color:"#1a1f36" }}>My Profile</Typography>
+                  <Typography sx={{ color:"#8892b0", fontSize:".875rem", mt:.5 }}>Your professional details</Typography>
+                </Box>
+                <Card className="doc-card" sx={{ p:4 }}>
+                  <Box sx={{ display:"flex", alignItems:"center", gap:2.5, mb:3 }}>
+                    <Avatar className="av-blue"
+                      sx={{ width:76, height:76, borderRadius:"22px", fontSize:"2rem",
+                            fontFamily:"'Cormorant Garamond',serif", fontWeight:700,
+                            boxShadow:"0 6px 20px rgba(79,110,247,.25)" }}>
+                      {doctor?.name?.charAt(0)}
+                    </Avatar>
+                    <Box>
+                      <Typography sx={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.6rem", fontWeight:700, color:"#1a1f36" }}>
+                        Dr. {doctor?.name}
+                      </Typography>
+                      <Typography sx={{ fontSize:".82rem", color:"#8892b0", mt:.5 }}>Doctor Account · Active</Typography>
+                    </Box>
+                  </Box>
+                  <Divider sx={{ mb:3, borderColor:"#e8ecf5" }} />
+                  <Grid container spacing={3}>
+                    {[
+                      ["Full Name",      `Dr. ${doctor?.name}`],
+                      ["Specialization", doctor?.specialization],
+                      ["Contact",        doctor?.contact],
+                      ["Hospital",       doctor?.hospital],
+                      ["Doctor ID",      `#${doctor?.id}`],
+                    ].map(([label, val]) => (
+                      <Grid item xs={12} sm={6} key={label}>
+                        <Typography sx={{ fontSize:".7rem", textTransform:"uppercase", letterSpacing:"1.1px", color:"#8892b0", fontWeight:600, mb:.6 }}>{label}</Typography>
+                        <Typography sx={{ fontSize:".95rem", fontWeight:500, color:"#1a1f36" }}>{val || "—"}</Typography>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Card>
+              </>
+            )}
+
+          </motion.div>
+        </AnimatePresence>
+      </Box>
+
+      {/* ── Patient detail + report modal ── */}
+      <PatientModal
+        appt={selectedAppt}
+        open={Boolean(selectedAppt)}
+        onClose={() => setSelectedAppt(null)}
+      />
     </Box>
   );
 }

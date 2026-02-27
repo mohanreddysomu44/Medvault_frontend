@@ -43,18 +43,16 @@ function App() {
           <Route
             path="/login"
             element={
-              <AuthLayout>
                 <LoginForm />
-              </AuthLayout>
             }
           />
 
           <Route
             path="/register"
             element={
-              <AuthLayout>
+             
                 <RegisterForm />
-              </AuthLayout>
+              
             }
           />
 
